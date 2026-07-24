@@ -9,7 +9,7 @@ const navigationItems = [
 
 export function SiteHeader() {
   return (
-    <header className="border-b border-black/10">
+    <header className="site-header border-b">
       <PageContainer className="flex min-h-16 flex-wrap items-center justify-between gap-x-6 gap-y-3 py-3 sm:min-h-20">
         <a className="brand-link" href="#main-content" aria-label="Portfolio home">
           Portfolio
