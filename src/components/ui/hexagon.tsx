@@ -44,7 +44,7 @@ function Hexagon({
       {title ? <title id={titleId}>{title}</title> : null}
       <polygon
         className="hexagon__shape"
-        points="50,2 92,26 92,74 50,98 8,74 8,26"
+        points="50,0 93.301,25 93.301,75 50,100 6.699,75 6.699,25"
         vectorEffect="non-scaling-stroke"
       />
     </svg>

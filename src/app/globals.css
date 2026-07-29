@@ -392,6 +392,37 @@ a {
   stroke-width: 2;
 }
 
+.hex-grid {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hex-grid__cell {
+  color: var(--color-border-subtle);
+  opacity: 0.52;
+  filter: drop-shadow(0 0 0 rgb(244 180 0 / 0));
+  transition: opacity 180ms ease-out, filter 180ms ease-out;
+}
+
+.hex-grid__cell .hexagon__shape {
+  fill: var(--color-surface);
+}
+
+.hex-grid__cell--nearby {
+  opacity: calc(0.52 + (var(--hex-proximity) * 0.48));
+  filter: drop-shadow(
+    0 0 calc(0.3rem + (var(--hex-proximity) * 0.55rem))
+      rgb(244 180 0 / calc(var(--hex-proximity) * 0.42))
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hex-grid__cell {
+    transition: none;
+  }
+}
+
 .site-shell {
   display: flex;
   min-height: 100svh;
@@ -471,7 +502,7 @@ a {
 
   .hero__hex-grid-slot {
     display: block;
-    min-height: min(38rem, 62vh);
+    height: min(38rem, 62vh);
   }
 }
 

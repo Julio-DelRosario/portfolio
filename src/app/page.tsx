@@ -1,4 +1,5 @@
 import { PageContainer } from "@/components/layout/page-container";
+import { HexGrid } from "@/components/ui/hex-grid";
 
 export default function Home() {
   return (
@@ -25,7 +26,9 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="hero__hex-grid-slot" aria-hidden="true" />
+          <div className="hero__hex-grid-slot" aria-hidden="true">
+            <HexGrid />
+          </div>
         </PageContainer>
       </section>
     </main>
