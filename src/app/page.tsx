@@ -1,10 +1,12 @@
+import { HoneycombCanvas } from "@/components/hero/HoneycombCanvas";
 import { PageContainer } from "@/components/layout/page-container";
-import { HexGrid } from "@/components/ui/hex-grid";
 
 export default function Home() {
   return (
     <main id="main-content" tabIndex={-1}>
       <section className="hero" aria-labelledby="hero-heading">
+        <HoneycombCanvas />
+
         <PageContainer className="hero__container">
           <div className="hero__copy">
             <p className="hero__name">Julio del Rosario</p>
@@ -24,10 +26,6 @@ export default function Home() {
                 Start a conversation
               </a>
             </div>
-          </div>
-
-          <div className="hero__hex-grid-slot" aria-hidden="true">
-            <HexGrid />
           </div>
         </PageContainer>
       </section>
