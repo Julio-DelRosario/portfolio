@@ -355,6 +355,43 @@ a {
   padding: var(--space-8);
 }
 
+.hexagon {
+  display: block;
+  overflow: visible;
+  color: var(--color-border-strong);
+}
+
+.hexagon__shape {
+  fill: var(--color-surface);
+  stroke: currentColor;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.hexagon--inactive {
+  color: var(--color-border-subtle);
+  opacity: 0.5;
+}
+
+.hexagon--hover {
+  color: var(--color-accent-hover);
+}
+
+.hexagon--hover .hexagon__shape {
+  fill: var(--color-surface-raised);
+  stroke-width: 2;
+}
+
+.hexagon--glow {
+  color: var(--color-accent);
+  filter: drop-shadow(0 0 0.7rem rgb(244 180 0 / 0.45));
+}
+
+.hexagon--glow .hexagon__shape {
+  fill: var(--color-surface-raised);
+  stroke-width: 2;
+}
+
 .site-shell {
   display: flex;
   min-height: 100svh;
