@@ -3,6 +3,7 @@ import { HoneycombCanvas } from "@/components/hero/HoneycombCanvas";
 import { PageContainer } from "@/components/layout/page-container";
 import { AboutSection } from "@/components/about/AboutSection";
 import { SkillsSection } from "@/components/skills/SkillsSection";
+import { ProjectsSection } from "@/components/projects/ProjectsSection";
 
 export default function Home() {
   return (
@@ -19,6 +20,7 @@ export default function Home() {
 
       <AboutSection />
       <SkillsSection />
+      <ProjectsSection />
     </main>
   );
 }
