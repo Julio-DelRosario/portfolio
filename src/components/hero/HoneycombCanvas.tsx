@@ -34,10 +34,10 @@ const ACTIVATION_RADIUS_FACTOR = 3.5;
 const RESIZE_DEBOUNCE_MS = 200;
 
 // Ambient timing
-const PULSE_INTERVAL_MIN_MS = 6000;
-const PULSE_INTERVAL_MAX_MS = 10000;
-const TWINKLE_INTERVAL_MIN_MS = 2000;
-const TWINKLE_INTERVAL_MAX_MS = 4000;
+const PULSE_COOLDOWN_MIN_MS = 6000;
+const PULSE_COOLDOWN_MAX_MS = 9000;
+const TWINKLE_INTERVAL_MIN_MS = 3000;
+const TWINKLE_INTERVAL_MAX_MS = 5000;
 
 function randomInterval(min: number, max: number): number {
   return min + Math.random() * (max - min);
@@ -126,7 +126,7 @@ export function HoneycombCanvas() {
       if (reducedMotionRef.current) {
         pulseTimerRef.current = setTimeout(
           schedulePulse,
-          randomInterval(PULSE_INTERVAL_MIN_MS, PULSE_INTERVAL_MAX_MS),
+          randomInterval(PULSE_COOLDOWN_MIN_MS, PULSE_COOLDOWN_MAX_MS),
         );
         return;
       }
@@ -136,11 +136,11 @@ export function HoneycombCanvas() {
       }
       pulseTimerRef.current = setTimeout(
         schedulePulse,
-        randomInterval(PULSE_INTERVAL_MIN_MS, PULSE_INTERVAL_MAX_MS),
+        randomInterval(PULSE_COOLDOWN_MIN_MS, PULSE_COOLDOWN_MAX_MS),
       );
     }
     // First pulse after a short delay so the page feels calm on load
-    pulseTimerRef.current = setTimeout(schedulePulse, 3000);
+    pulseTimerRef.current = setTimeout(schedulePulse, 2500);
 
     // -- Ambient twinkle scheduling --
     function scheduleTwinkle() {

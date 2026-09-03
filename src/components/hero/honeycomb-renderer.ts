@@ -17,19 +17,19 @@ import { flatTopHexVertices } from "@/components/hero/honeycomb-grid";
 const COLOR_ACCENT = { r: 244, g: 180, b: 0 }; // #F4B400
 const COLOR_ACCENT_GLOW = { r: 255, g: 201, b: 51 }; // #FFC933
 
-// Base cell appearance
-const BASE_STROKE_ALPHA_MIN = 0.04;
-const BASE_STROKE_ALPHA_MAX = 0.10;
+// Base cell appearance (intentionally subtle — grid is barely visible at rest)
+const BASE_STROKE_ALPHA_MIN = 0.03;
+const BASE_STROKE_ALPHA_MAX = 0.08;
 const BASE_STROKE_WIDTH = 0.7;
 
-// Active cell appearance
+// Active cell appearance (pulse / hover — clearly visible amber)
 const ACTIVE_STROKE_ALPHA_MAX = 0.65;
-const ACTIVE_STROKE_WIDTH = 1.0;
-const GLOW_BLUR_MAX = 18;
+const ACTIVE_STROKE_WIDTH = 1.4;
+const GLOW_BLUR_MAX = 10;
 const GLOW_ALPHA_MAX = 0.35;
 
 // Connection appearance
-const CONNECTION_BASE_ALPHA = 0.025;
+const CONNECTION_BASE_ALPHA = 0.015;
 const CONNECTION_ACTIVE_ALPHA_MAX = 0.30;
 const CONNECTION_BASE_WIDTH = 0.4;
 const CONNECTION_ACTIVE_WIDTH = 0.7;

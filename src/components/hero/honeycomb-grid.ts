@@ -47,6 +47,10 @@ export type HoneycombGrid = {
   connections: HexConnection[];
   /** Circumradius (center-to-vertex) in canvas pixels. */
   cellRadius: number;
+  /** Viewport width used to generate this grid. */
+  viewportWidth: number;
+  /** Viewport height used to generate this grid. */
+  viewportHeight: number;
 };
 
 // ---------------------------------------------------------------------------
@@ -181,5 +185,5 @@ export function generateHoneycombGrid(
     }
   }
 
-  return { cells, connections, cellRadius: R };
+  return { cells, connections, cellRadius: R, viewportWidth, viewportHeight };
 }

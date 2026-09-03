@@ -1,8 +1,12 @@
 /**
  * honeycomb-ambient.ts
  *
- * Pure functions for ambient grid animations: energy pulses along connected
- * paths and random cell twinkles. No React, no DOM.
+ * Curated pulse routes and ambient twinkle effects for the honeycomb grid.
+ *
+ * Pulses travel along predefined directional routes rather than random walks,
+ * creating the impression of a deliberate signal moving through a system.
+ * Route templates define start/end positions as viewport fractions and are
+ * resolved against the actual grid geometry at runtime.
  *
  * All timing is based on a monotonic timestamp (performance.now / rAF time).
  */
@@ -18,8 +22,10 @@ export type PulseState = {
   path: number[];
   /** Timestamp (ms) when the pulse started. */
   startTime: number;
-  /** Total duration of the pulse animation (ms). */
-  duration: number;
+  /** Duration (ms) for the signal to travel the full path. */
+  travelDuration: number;
+  /** Duration (ms) the final cell holds before fading out. */
+  holdDuration: number;
 };
 
 export type TwinkleEntry = {
@@ -32,58 +38,213 @@ export type TwinkleEntry = {
 };
 
 // ---------------------------------------------------------------------------
-// Pulse — energy travelling along a connected path
+// Pulse configuration — all timing/intensity values in one place
 // ---------------------------------------------------------------------------
 
-const PULSE_MIN_LENGTH = 5;
-const PULSE_MAX_LENGTH = 10;
-const PULSE_DURATION_MS = 2000;
-const PULSE_PEAK_INTENSITY = 0.30;
-/** How far ahead/behind the head the glow extends (0–1 of total progress). */
-const PULSE_SPREAD = 0.30;
+/** Time (ms) for the signal to traverse one cell. */
+const PULSE_STEP_DURATION_MS = 350;
+
+/** Time (ms) the final cell holds its glow before fading. */
+const PULSE_HOLD_MS = 600;
+
+/** Peak brightness of the active cell (0–1, consumed by the renderer). */
+const PULSE_PEAK_INTENSITY = 0.55;
 
 /**
- * Selects a random connected path of 5–10 cells by random-walking along
- * neighbor edges. Biases the start cell toward viewport-interior cells.
+ * How far the glow extends around the signal head (0–1 of normalised path).
+ * 0.15 lights ~3 cells simultaneously for a focused traveling signal.
  */
-export function createPulsePath(grid: HoneycombGrid): number[] {
-  const { cells } = grid;
-  if (cells.length === 0) return [];
+const PULSE_SPREAD = 0.15;
 
-  // Pick a starting cell — prefer cells well inside the viewport
-  const interiorCells = cells.filter(
-    (c) =>
-      c.cx > grid.cellRadius * 2 &&
-      c.cy > grid.cellRadius * 2 &&
-      c.neighbors.length >= 4,
-  );
-  const pool = interiorCells.length > 10 ? interiorCells : cells;
-  const start = pool[Math.floor(Math.random() * pool.length)];
+// ---------------------------------------------------------------------------
+// Route templates — curated start→end paths across the honeycomb
+// ---------------------------------------------------------------------------
 
-  const pathLength =
-    PULSE_MIN_LENGTH + Math.floor(Math.random() * (PULSE_MAX_LENGTH - PULSE_MIN_LENGTH + 1));
+type RouteTemplate = {
+  /** Start position as fraction of viewport (0–1). */
+  startX: number;
+  startY: number;
+  /** End position as fraction of viewport (0–1). */
+  endX: number;
+  endY: number;
+  /** Target number of cells in the path. */
+  steps: number;
+};
 
-  const visited = new Set<number>([start.index]);
-  const path: number[] = [start.index];
-  let current: HexCell = start;
+/**
+ * Five curated routes covering different areas and directions.
+ * Each is resolved against the actual grid geometry at runtime
+ * using a direction-biased neighbor walk.
+ */
+const ROUTE_TEMPLATES: RouteTemplate[] = [
+  // 1. Left → right across the upper third
+  { startX: 0.10, startY: 0.30, endX: 0.85, endY: 0.25, steps: 14 },
+  // 2. Right → left across the middle
+  { startX: 0.90, startY: 0.50, endX: 0.15, endY: 0.45, steps: 14 },
+  // 3. Top-left → bottom-right diagonal
+  { startX: 0.15, startY: 0.20, endX: 0.80, endY: 0.70, steps: 12 },
+  // 4. Bottom-left → top-right diagonal
+  { startX: 0.15, startY: 0.75, endX: 0.75, endY: 0.25, steps: 12 },
+  // 5. Left → right across the lower third
+  { startX: 0.12, startY: 0.65, endX: 0.82, endY: 0.70, steps: 13 },
+];
 
-  for (let step = 1; step < pathLength; step++) {
-    // Unvisited neighbors
-    const candidates = current.neighbors.filter((n) => !visited.has(n));
-    if (candidates.length === 0) break;
+/** Track last route index to avoid repeating consecutively. */
+let lastRouteIndex = -1;
 
-    const nextIndex = candidates[Math.floor(Math.random() * candidates.length)];
-    visited.add(nextIndex);
-    path.push(nextIndex);
-    current = cells[nextIndex];
+// ---------------------------------------------------------------------------
+// Route resolution — convert a template into actual cell indices
+// ---------------------------------------------------------------------------
+
+/** Find the cell whose center is closest to the given canvas coordinates. */
+function findNearestCell(
+  cells: HexCell[],
+  x: number,
+  y: number,
+): HexCell | null {
+  let best: HexCell | null = null;
+  let bestDist = Infinity;
+  for (const cell of cells) {
+    const dx = cell.cx - x;
+    const dy = cell.cy - y;
+    const dist = dx * dx + dy * dy;
+    if (dist < bestDist) {
+      bestDist = dist;
+      best = cell;
+    }
+  }
+  return best;
+}
+
+/**
+ * Walk from a start cell toward a target position, always picking the
+ * unvisited neighbor most aligned with the overall direction.
+ * Produces smooth, directional paths that follow hex topology.
+ */
+function walkToward(
+  cells: HexCell[],
+  start: HexCell,
+  targetX: number,
+  targetY: number,
+  steps: number,
+): number[] {
+  const path = [start.index];
+  const visited = new Set([start.index]);
+  let current = start;
+
+  // Normalised direction vector from start toward target
+  const dirX = targetX - start.cx;
+  const dirY = targetY - start.cy;
+  const dirLen = Math.sqrt(dirX * dirX + dirY * dirY) || 1;
+  const ndx = dirX / dirLen;
+  const ndy = dirY / dirLen;
+
+  for (let i = 1; i < steps; i++) {
+    let bestNeighbor = -1;
+    let bestScore = -Infinity;
+
+    for (const ni of current.neighbors) {
+      if (visited.has(ni)) continue;
+      const neighbor = cells[ni];
+      // Score = alignment with overall direction (dot product)
+      const dx = neighbor.cx - current.cx;
+      const dy = neighbor.cy - current.cy;
+      const len = Math.sqrt(dx * dx + dy * dy) || 1;
+      const score = (dx * ndx + dy * ndy) / len;
+      if (score > bestScore) {
+        bestScore = score;
+        bestNeighbor = ni;
+      }
+    }
+
+    if (bestNeighbor === -1) break; // no unvisited neighbors
+    visited.add(bestNeighbor);
+    path.push(bestNeighbor);
+    current = cells[bestNeighbor];
   }
 
   return path;
 }
 
 /**
- * Computes intensity for each cell in a pulse path at the given timestamp.
- * Returns an empty map if the pulse has ended.
+ * Resolve a route template against a concrete grid, producing a path
+ * of cell indices. Returns null if the grid can't support the route
+ * (fewer than 6 valid cells).
+ */
+function resolveRoute(
+  grid: HoneycombGrid,
+  template: RouteTemplate,
+): number[] | null {
+  const { cells, viewportWidth, viewportHeight } = grid;
+
+  const startX = template.startX * viewportWidth;
+  const startY = template.startY * viewportHeight;
+  const endX = template.endX * viewportWidth;
+  const endY = template.endY * viewportHeight;
+
+  const startCell = findNearestCell(cells, startX, startY);
+  if (!startCell) return null;
+
+  const path = walkToward(cells, startCell, endX, endY, template.steps);
+  // Require at least 6 cells for a deliberate visual
+  return path.length >= 6 ? path : null;
+}
+
+// ---------------------------------------------------------------------------
+// Pulse API
+// ---------------------------------------------------------------------------
+
+/**
+ * Creates a new pulse along a curated route. Selects a different route
+ * template each time to avoid consecutive repetition.
+ */
+export function startPulse(
+  grid: HoneycombGrid,
+  now: number,
+): PulseState | null {
+  const templateCount = ROUTE_TEMPLATES.length;
+
+  // Build candidate list excluding the last-used route
+  const candidates = Array.from({ length: templateCount }, (_, i) => i).filter(
+    (i) => i !== lastRouteIndex,
+  );
+
+  // Shuffle for variety
+  for (let i = candidates.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [candidates[i], candidates[j]] = [candidates[j], candidates[i]];
+  }
+
+  for (const idx of candidates) {
+    const path = resolveRoute(grid, ROUTE_TEMPLATES[idx]);
+    if (path) {
+      lastRouteIndex = idx;
+      return {
+        path,
+        startTime: now,
+        travelDuration: path.length * PULSE_STEP_DURATION_MS,
+        holdDuration: PULSE_HOLD_MS,
+      };
+    }
+  }
+
+  return null;
+}
+
+/** Returns true when the pulse (travel + hold) is fully complete. */
+export function isPulseComplete(
+  pulse: PulseState | null,
+  now: number,
+): boolean {
+  if (!pulse) return true;
+  return now - pulse.startTime > pulse.travelDuration + pulse.holdDuration;
+}
+
+/**
+ * Computes intensity for each cell in the pulse path at the given timestamp.
+ *
+ * During travel: a smoothstep bell curve follows the signal head.
+ * During hold:   the remaining lit cells fade out with an ease-out curve.
  */
 export function computePulseIntensities(
   pulse: PulseState | null,
@@ -93,41 +254,41 @@ export function computePulseIntensities(
   if (!pulse) return result;
 
   const elapsed = now - pulse.startTime;
-  if (elapsed < 0 || elapsed > pulse.duration) return result;
+  const totalDuration = pulse.travelDuration + pulse.holdDuration;
+  if (elapsed < 0 || elapsed > totalDuration) return result;
 
-  const progress = elapsed / pulse.duration; // 0 → 1 (head position along path)
+  // Where is the signal head along the path? (0 → 1)
+  let progress: number;
+  let fadeFactor: number;
+
+  if (elapsed <= pulse.travelDuration) {
+    // Traveling phase: head moves from 0 → 1
+    progress = elapsed / pulse.travelDuration;
+    fadeFactor = 1;
+  } else {
+    // Hold phase: head stays at end, everything fades out
+    progress = 1;
+    const holdElapsed = elapsed - pulse.travelDuration;
+    const t = 1 - holdElapsed / pulse.holdDuration;
+    fadeFactor = t * t; // ease-out
+  }
+
   const pathLen = pulse.path.length;
 
   for (let i = 0; i < pathLen; i++) {
-    // Normalised position of this cell along the path (0 → 1)
     const cellPos = i / (pathLen - 1);
-    // Distance from the pulse head
     const dist = Math.abs(progress - cellPos);
 
     if (dist > PULSE_SPREAD) continue;
 
-    // Smooth bell curve around the head
     const t = 1 - dist / PULSE_SPREAD;
-    const intensity = t * t * (3 - 2 * t) * PULSE_PEAK_INTENSITY; // smoothstep × peak
+    const intensity = t * t * (3 - 2 * t) * PULSE_PEAK_INTENSITY * fadeFactor;
     if (intensity > 0.005) {
       result.set(pulse.path[i], intensity);
     }
   }
 
   return result;
-}
-
-/** Returns true when the pulse animation is complete. */
-export function isPulseComplete(pulse: PulseState | null, now: number): boolean {
-  if (!pulse) return true;
-  return now - pulse.startTime > pulse.duration;
-}
-
-/** Creates a new PulseState starting at the given timestamp. */
-export function startPulse(grid: HoneycombGrid, now: number): PulseState | null {
-  const path = createPulsePath(grid);
-  if (path.length < 3) return null;
-  return { path, startTime: now, duration: PULSE_DURATION_MS };
 }
 
 // ---------------------------------------------------------------------------

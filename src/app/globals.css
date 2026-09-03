@@ -176,6 +176,8 @@ a {
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease,
+    color 180ms ease, box-shadow 180ms ease;
 }
 
 .ds-button:disabled {
@@ -220,7 +222,12 @@ a {
 
 .ds-button--primary:hover:not(:disabled) {
   background: var(--accent-hover);
+  box-shadow: 0 0 20px rgb(244 180 0 / 0.15);
   color: var(--accent-foreground);
+}
+
+.ds-button--secondary:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.03);
 }
 
 .ds-section-heading {
@@ -388,49 +395,81 @@ a {
   display: flex;
   width: 100%;
   align-items: center;
-  padding-top: clamp(4rem, 11vh, 8rem);
-  padding-bottom: clamp(4rem, 11vh, 8rem);
+  padding-top: clamp(5rem, 14vh, 10rem);
+  padding-bottom: clamp(5rem, 14vh, 10rem);
 }
 
 .hero__copy {
   position: relative;
-  max-width: 43rem;
+  max-width: 40rem;
 }
 
+/* ---- 1. Name — dominant personal identity ---- */
+
 .hero__name {
-  margin: 0 0 var(--space-6);
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+/* ---- 2. Role — profession label ---- */
+
+.hero__role {
+  margin: var(--space-5) 0 0;
   color: var(--color-accent);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.12em;
-  line-height: var(--line-height-snug);
+  font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
   text-transform: uppercase;
 }
 
-.hero__headline {
-  max-width: 13ch;
-  margin: 0;
-  color: var(--color-text-primary);
-  font-size: clamp(3rem, 7vw, 6.5rem);
-  font-weight: 700;
-  letter-spacing: -0.065em;
-  line-height: 0.96;
+/* ---- Accent divider ---- */
+
+.hero__divider {
+  width: 2.5rem;
+  height: 2px;
+  margin: var(--space-8) 0;
+  border: 0;
+  background: var(--color-accent);
+  opacity: 0.6;
 }
 
-.hero__description {
-  max-width: 34rem;
-  margin: var(--space-8) 0 0;
+/* ---- 3. Tagline — value proposition ---- */
+
+.hero__tagline {
+  margin: 0;
   color: var(--color-text-secondary);
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-size: clamp(1.375rem, 2.8vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+/* ---- 4. Description ---- */
+
+.hero__description {
+  max-width: 32rem;
+  margin: var(--space-6) 0 0;
+  color: var(--color-text-tertiary);
+  font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
   line-height: 1.7;
 }
+
+/* ---- 5. Actions ---- */
 
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: var(--space-4);
   margin-top: var(--space-10);
 }
+
+/* ---- Small mobile: stack actions ---- */
 
 @media (max-width: 25rem) {
   .hero__actions {
@@ -439,11 +478,22 @@ a {
   }
 }
 
+/* ---- Hero bottom fade ---- */
+
+.hero__bottom-fade {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  height: 6rem;
+  background: linear-gradient(to bottom, transparent, var(--color-canvas));
+  pointer-events: none;
+}
 .site-header,
 .site-section {
   border-color: var(--color-border-subtle);
 }
-
 .site-section__eyebrow {
   color: var(--color-accent);
   font-size: var(--font-size-sm);
@@ -522,5 +572,9 @@ a {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .ds-button {
+    transition: none;
   }
 }
