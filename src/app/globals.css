@@ -1113,3 +1113,27 @@ a {
   transform: scale(0.95);
 }
 
+
+
+/* Project Side-by-Side Image Placeholder */
+.project-card__image-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.project-card__image-placeholder-text {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--color-accent);
+  padding-bottom: var(--space-2);
+}

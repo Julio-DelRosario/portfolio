@@ -19,7 +19,7 @@ export type Project = {
 };
 
 // 10 Placeholders as requested for the navigator grid
-export const PROJECTS: Project[] = Array.from({ length: 10 }).map((_, i) => ({
+export const PROJECTS: Project[] = Array.from({ length: 6 }).map((_, i) => ({
   id: `project-${i + 1}`,
   title: `Project ${String(i + 1).padStart(2, '0')}`,
   summary: "Short explanation of the problem and solution.",

@@ -1,11 +1,13 @@
+#!/bin/bash
+cat << 'TSX_EOF' > src/components/projects/ProjectsSection.tsx
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { motion, AnimatePresence, useReducedMotion, useScroll, useMotionValueEvent } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useMotionValueEvent } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { PageContainer } from "@/components/layout/page-container";
-import { PROJECTS } from "@/data/projects";
-import { ExternalLink, GitBranch } from "lucide-react";
+import { PROJECTS, Project } from "@/data/projects";
+import { ExternalLink, GitBranch, ImageIcon } from "lucide-react";
 
 const STAGGER_MS = 100;
 const DURATION_S = 0.6;
@@ -78,6 +80,59 @@ function NavigatorHexagon({
   );
 }
 
+function ProjectCard({ project, index, isActive }: { project: Project; index: number; isActive: boolean }) {
+  return (
+    <div className="project-card">
+      <div className="project-card__image-container">
+        {project.imageUrl ? (
+          <img src={project.imageUrl} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+            <ImageIcon className="w-8 h-8 text-[var(--color-text-tertiary)]" />
+            <span className="project-card__image-placeholder-text">Image Placeholder</span>
+          </div>
+        )}
+      </div>
+      
+      <div className="project-details">
+        <header className="project-details__header">
+          <p className="project-details__tag">PROJECT — {String(index + 1).padStart(2, "0")}</p>
+          <h3 className="project-details__title">{project.title}</h3>
+          <p className="project-details__role">{project.role}</p>
+        </header>
+
+        <div className="project-details__body">
+          <p className="project-details__summary">{project.summary}</p>
+          <p className="project-details__description">{project.description}</p>
+          
+          <ul className="project-details__tech">
+            {project.technologies.map((tech) => (
+              <li key={tech} className="project-details__tech-item">{tech}</li>
+            ))}
+          </ul>
+
+          {project.links.length > 0 && (
+            <div className="project-details__links">
+              {project.links.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-details__link"
+                >
+                  <ProjectLinkIcon type={link.type} />
+                  <span>{link.label}</span>
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function ProjectsSection() {
   const shouldReduceMotion = useReducedMotion();
   const initial = shouldReduceMotion ? "visible" : "hidden";
@@ -87,14 +142,9 @@ export function ProjectsSection() {
   
   const sectionRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const lastInteractionTime = useRef<number>(0);
+  const lastInteractionTime = useRef<number>(Date.now());
   
-  const activeProject = PROJECTS[activeIndex] || PROJECTS[0];
   const numProjects = PROJECTS.length;
-
-  useEffect(() => {
-    lastInteractionTime.current = Date.now();
-  }, []);
 
   useEffect(() => {
     activeIndexRef.current = activeIndex;
@@ -161,14 +211,14 @@ export function ProjectsSection() {
     window.scrollTo({ top: targetY, behavior: shouldReduceMotion ? "auto" : "smooth" });
   }, [numProjects, shouldReduceMotion]);
 
-  // Auto Progression (1.5 seconds)
+  // Auto Progression (1.5 seconds, 4.5s at the end)
   useEffect(() => {
     if (shouldReduceMotion) return;
 
     const interval = setInterval(() => {
-      // 1.5 seconds elapsed since last interaction
       const isAtEnd = activeIndexRef.current === numProjects - 1;
       const cooldown = isAtEnd ? 4500 : 1500;
+      
       if (Date.now() - lastInteractionTime.current > cooldown) {
         lastInteractionTime.current = Date.now();
         
@@ -195,10 +245,10 @@ export function ProjectsSection() {
 
   return (
     <div ref={sectionRef} style={{ height: '350vh', position: 'relative' }}>
-      <div style={{ position: 'sticky', top: 0, height: '105vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden' }}>
+      <div style={{ position: 'sticky', top: 0, height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden' }}>
         <section id="projects" className="projects site-section" aria-labelledby="projects-heading">
           <PageContainer>
-            <div className="projects__grid" style={{ padding: "0 0" }}>
+            <div className="projects__grid">
               
               <motion.div
                 className="projects__header"
@@ -225,10 +275,9 @@ export function ProjectsSection() {
                   <p className="projects__statement">Things I&apos;ve built.</p>
                 </motion.div>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '2rem', marginBottom: '3rem', justifyContent: 'center' }}>
-                  {/* Hexagon Navigator Area */}
+                {/* Hexagon Navigator Area */}
                 <motion.div 
-                  className="projects__navigator-wrapper" style={{ flex: "0 0 auto", margin: 0 }}
+                  className="projects__navigator-wrapper"
                   initial={initial}
                   whileInView="visible"
                   viewport={{ once: true, margin: "-10%" }}
@@ -275,81 +324,32 @@ export function ProjectsSection() {
                   </div>
                 </motion.div>
 
-                  {/* Image Placeholder Beside Navigator */}
+                {/* Sneak Peek Carousel Viewport */}
+                <div className="projects__cards-viewport">
                   <motion.div
-                    initial={initial}
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-10%" }}
-                    variants={fadeUp}
-                    custom={STAGGER_MS * 3}
-                    style={{ flex: '1 1 300px', maxWidth: '500px' }}
+                    className="projects__cards-track"
+                    animate={{ x: `calc(-${activeIndex * 75}%)` }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   >
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={activeProject.id}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <div className="project-card__image-container">
-                          {activeProject.imageUrl ? (
-                            <img src={activeProject.imageUrl} alt={activeProject.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                          ) : (
-                            <span className="project-card__image-placeholder-text">Project Screenshot</span>
-                          )}
+                    {PROJECTS.map((project, i) => {
+                      const isActive = activeIndex === i;
+                      
+                      return (
+                        <div
+                          key={project.id}
+                          className="project-card-wrapper"
+                          style={{
+                            opacity: isActive ? 1 : 0.3,
+                            transform: `scale(${isActive ? 1 : 0.95})`,
+                            transition: "opacity 0.4s ease, transform 0.4s ease",
+                            pointerEvents: isActive ? "auto" : "none"
+                          }}
+                        >
+                          <ProjectCard project={project} index={i} isActive={isActive} />
                         </div>
-                      </motion.div>
-                    </AnimatePresence>
+                      );
+                    })}
                   </motion.div>
-                </div>
-
-                {/* Selected Project Information */}
-                <div className="projects__selected-info">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activeProject.id}
-                      className="project-details"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <header className="project-details__header">
-                        <p className="project-details__tag">SELECTED PROJECT — {String(activeIndex + 1).padStart(2, "0")}</p>
-                        <h3 className="project-details__title">{activeProject.title}</h3>
-                        <p className="project-details__role">{activeProject.role}</p>
-                      </header>
-
-                      <div className="project-details__body">
-                        <p className="project-details__summary">{activeProject.summary}</p>
-                        <p className="project-details__description">{activeProject.description}</p>
-                        
-                        <ul className="project-details__tech">
-                          {activeProject.technologies.map((tech) => (
-                            <li key={tech} className="project-details__tech-item">{tech}</li>
-                          ))}
-                        </ul>
-
-                        {activeProject.links.length > 0 && (
-                          <div className="project-details__links">
-                            {activeProject.links.map((link) => (
-                              <a
-                                key={link.label}
-                                href={link.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="project-details__link"
-                              >
-                                <ProjectLinkIcon type={link.type} />
-                                <span>{link.label}</span>
-                              </a>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
                 </div>
                 
               </div>
@@ -360,3 +360,4 @@ export function ProjectsSection() {
     </div>
   );
 }
+TSX_EOF
