@@ -161,14 +161,14 @@ export function ProjectsSection() {
     window.scrollTo({ top: targetY, behavior: shouldReduceMotion ? "auto" : "smooth" });
   }, [numProjects, shouldReduceMotion]);
 
-  // Auto Progression (1.5 seconds)
+  // Auto Progression (5 seconds)
   useEffect(() => {
     if (shouldReduceMotion) return;
 
     const interval = setInterval(() => {
-      // 1.5 seconds elapsed since last interaction
+      // 5 seconds elapsed since last interaction
       const isAtEnd = activeIndexRef.current === numProjects - 1;
-      const cooldown = isAtEnd ? 4500 : 1500;
+      const cooldown = isAtEnd ? 7000 : 5000;
       if (Date.now() - lastInteractionTime.current > cooldown) {
         lastInteractionTime.current = Date.now();
         

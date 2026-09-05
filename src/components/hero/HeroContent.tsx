@@ -3,13 +3,9 @@
 /**
  * HeroContent.tsx
  *
- * Editorial hero composition with a five-level typographic hierarchy:
- *
- *   1. Name        — largest, boldest → immediate personal identity
- *   2. Role        — small accent label → establishes profession
- *   3. Tagline     — medium secondary headline → value proposition
- *   4. Description — quiet body copy → supporting detail
- *   5. Actions     — CTAs
+ * Wraps the hero copy (name, headline, description, CTAs) with Framer Motion
+ * entrance animations. Each element fades in and slides up with a staggered
+ * delay for a natural cascade effect.
  *
  * Animations are fully disabled when prefers-reduced-motion is active.
  */
@@ -21,12 +17,12 @@ import type { Variants } from "framer-motion";
 // Animation configuration
 // ---------------------------------------------------------------------------
 
-const STAGGER_MS = 90;
+const STAGGER_MS = 80;
 const DURATION_S = 0.6;
 const EASE = [0.25, 0.1, 0.25, 1] as const;
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 18 },
+const fadeSlideUp: Variants = {
+  hidden: { opacity: 0, y: 16 },
   visible: (delay: number) => ({
     opacity: 1,
     y: 0,
@@ -38,8 +34,8 @@ const fadeUp: Variants = {
   }),
 };
 
-const fadeUpSmall: Variants = {
-  hidden: { opacity: 0, y: 10 },
+const fadeSlideUpSmall: Variants = {
+  hidden: { opacity: 0, y: 12 },
   visible: (delay: number) => ({
     opacity: 1,
     y: 0,
@@ -62,81 +58,58 @@ export function HeroContent() {
 
   return (
     <div className="hero__copy">
-      {/* ---- 1. Name — dominant identity ---- */}
-      <motion.h1
-        id="hero-heading"
+      <motion.p
         className="hero__name"
-        variants={fadeUp}
+        variants={fadeSlideUpSmall}
         initial={initial}
         animate={animate}
         custom={0}
       >
-        Julio Del Rosario
-      </motion.h1>
+        Julio del Rosario
+      </motion.p>
 
-      {/* ---- 2. Role — profession label ---- */}
-      <motion.p
-        className="hero__role"
-        variants={fadeUpSmall}
+      <motion.h1
+        id="hero-heading"
+        className="hero__headline"
+        variants={fadeSlideUp}
         initial={initial}
         animate={animate}
         custom={STAGGER_MS}
       >
-        Full-Stack Developer
-      </motion.p>
+        Building considered digital experiences.
+      </motion.h1>
 
-      {/* ---- Accent divider ---- */}
-      <motion.hr
-        className="hero__divider"
-        aria-hidden="true"
-        variants={fadeUpSmall}
-        initial={initial}
-        animate={animate}
-        custom={STAGGER_MS * 1.5}
-      />
-
-      {/* ---- 3. Tagline — value proposition ---- */}
       <motion.p
-        className="hero__tagline"
-        variants={fadeUp}
+        className="hero__description"
+        variants={fadeSlideUpSmall}
         initial={initial}
         animate={animate}
         custom={STAGGER_MS * 2}
       >
-        I build software with intention.
+        I am a software engineer who turns ambitious ideas into clear,
+        dependable products — where thoughtful systems meet purposeful
+        interfaces.
       </motion.p>
 
-      {/* ---- 4. Description — supporting detail ---- */}
-      <motion.p
-        className="hero__description"
-        variants={fadeUpSmall}
-        initial={initial}
-        animate={animate}
-        custom={STAGGER_MS * 2.5}
-      >
-        Full-stack developer focused on building useful, thoughtful, and
-        technically solid digital products.
-      </motion.p>
-
-      {/* ---- 5. Actions ---- */}
       <motion.div
         className="hero__actions"
         aria-label="Hero actions"
-        variants={fadeUpSmall}
+        variants={fadeSlideUpSmall}
         initial={initial}
         animate={animate}
         custom={STAGGER_MS * 3}
       >
         <a className="ds-button ds-button--primary ds-button--lg" href="#work">
-          View my work
+          View selected work
         </a>
         <a
           className="ds-button ds-button--secondary ds-button--lg"
           href="#contact"
         >
-          Contact me
+          Start a conversation
         </a>
       </motion.div>
     </div>
   );
 }
+
