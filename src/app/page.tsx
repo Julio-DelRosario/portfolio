@@ -4,6 +4,8 @@ import { PageContainer } from "@/components/layout/page-container";
 import { AboutSection } from "@/components/about/AboutSection";
 import { SkillsSection } from "@/components/skills/SkillsSection";
 import { ProjectsSection } from "@/components/projects/ProjectsSection";
+import { ExperienceSection } from "@/components/experience/ExperienceSection";
+import { ContactSection } from "@/components/contact/ContactSection";
 
 export default function Home() {
   return (
@@ -21,6 +23,8 @@ export default function Home() {
       <AboutSection />
       <SkillsSection />
       <ProjectsSection />
+      <ExperienceSection />
+      <ContactSection />
     </main>
   );
 }
