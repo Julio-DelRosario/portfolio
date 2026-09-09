@@ -12,7 +12,7 @@ export function SiteFooter() {
       <PageContainer>
         <div className="footer__top">
           <div className="footer__brand">
-            <span className="footer__logo">Julio's</span>
+            <span className="footer__logo">Julio&apos;s</span>
             <p className="footer__tagline">Built with intention.</p>
           </div>
 
@@ -30,9 +30,7 @@ export function SiteFooter() {
         </div>
 
         <div className="footer__bottom">
-          <p className="footer__copyright">
-            © {currentYear} Julio Del Rosario
-          </p>
+            <p className="footer__copyright">© {currentYear} Julio Del Rosario</p>
 
           <div className="footer__actions">
             <div className="footer__socials">

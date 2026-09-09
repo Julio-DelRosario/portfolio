@@ -680,7 +680,7 @@ a {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-6);
-  padding: clamp(5rem, 12vh, 8rem) 0;
+  padding: clamp(5rem, 12vh, 2rem) 0;
 }
 
 @media (min-width: 48rem) {
@@ -697,7 +697,7 @@ a {
   line-height: 1.15;
   letter-spacing: -0.03em;
   text-wrap: balance;
-  margin: 0 0 var(--space-12);
+  margin: 0 0 var(--space-6);
 }
 
 .skills__categories {

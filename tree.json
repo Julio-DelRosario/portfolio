@@ -1,0 +1,221 @@
+{
+  "nodes": [
+    {
+      "id": "center",
+      "label": "SKILLS",
+      "x": 400,
+      "y": 300,
+      "type": "center",
+      "radius": 40
+    },
+    {
+      "id": "Frontend",
+      "label": "Frontend",
+      "x": 340,
+      "y": 403.92304845413264,
+      "type": "category",
+      "radius": 35,
+      "category": "Frontend"
+    },
+    {
+      "id": "React",
+      "label": "React",
+      "x": 385,
+      "y": 481.8653347947321,
+      "type": "skill",
+      "radius": 25,
+      "category": "Frontend"
+    },
+    {
+      "id": "Next.js",
+      "label": "Next.js",
+      "x": 351.4981309594419,
+      "y": 513.3204569446427,
+      "type": "skill",
+      "radius": 25,
+      "category": "Frontend"
+    },
+    {
+      "id": "TypeScript",
+      "label": "TypeScript",
+      "x": 312.18847050625476,
+      "y": 489.51813492069647,
+      "type": "skill",
+      "radius": 25,
+      "category": "Frontend"
+    },
+    {
+      "id": "JavaScript",
+      "label": "JavaScript",
+      "x": 266.39563330052556,
+      "y": 485.668979256646,
+      "type": "skill",
+      "radius": 25,
+      "category": "Frontend"
+    },
+    {
+      "id": "Tailwind CSS",
+      "label": "Tailwind CSS",
+      "x": 257.78090881216593,
+      "y": 440.5293463309547,
+      "type": "skill",
+      "radius": 25,
+      "category": "Frontend"
+    },
+    {
+      "id": "Framer Motion",
+      "label": "Framer Motion",
+      "x": 230,
+      "y": 403.92304845413264,
+      "type": "skill",
+      "radius": 25,
+      "category": "Frontend"
+    },
+    {
+      "id": "Backend",
+      "label": "Backend",
+      "x": 339.99999999999994,
+      "y": 196.0769515458674,
+      "type": "category",
+      "radius": 35,
+      "category": "Backend"
+    },
+    {
+      "id": "Node.js",
+      "label": "Node.js",
+      "x": 249.99999999999994,
+      "y": 196.0769515458674,
+      "type": "skill",
+      "radius": 25,
+      "category": "Backend"
+    },
+    {
+      "id": "REST APIs",
+      "label": "REST APIs",
+      "x": 394.99999999999994,
+      "y": 100.81415712957914,
+      "type": "skill",
+      "radius": 25,
+      "category": "Backend"
+    },
+    {
+      "id": "Cloud & Tools",
+      "label": "Cloud & Tools",
+      "x": 520,
+      "y": 300,
+      "type": "category",
+      "radius": 35,
+      "category": "Cloud & Tools"
+    },
+    {
+      "id": "Git",
+      "label": "Git",
+      "x": 565,
+      "y": 222.05771365940052,
+      "type": "skill",
+      "radius": 25,
+      "category": "Cloud & Tools"
+    },
+    {
+      "id": "GitHub",
+      "label": "GitHub",
+      "x": 623.3661882864499,
+      "y": 262.37778423417643,
+      "type": "skill",
+      "radius": 25,
+      "category": "Cloud & Tools"
+    },
+    {
+      "id": "Linux",
+      "label": "Linux",
+      "x": 604.5723358707318,
+      "y": 330.7818128993102,
+      "type": "skill",
+      "radius": 25,
+      "category": "Cloud & Tools"
+    },
+    {
+      "id": "Vercel",
+      "label": "Vercel",
+      "x": 575,
+      "y": 395.2627944162882,
+      "type": "skill",
+      "radius": 25,
+      "category": "Cloud & Tools"
+    }
+  ],
+  "links": [
+    {
+      "source": "center",
+      "target": "Frontend"
+    },
+    {
+      "source": "Frontend",
+      "target": "React",
+      "category": "Frontend"
+    },
+    {
+      "source": "Frontend",
+      "target": "Next.js",
+      "category": "Frontend"
+    },
+    {
+      "source": "Frontend",
+      "target": "TypeScript",
+      "category": "Frontend"
+    },
+    {
+      "source": "Frontend",
+      "target": "JavaScript",
+      "category": "Frontend"
+    },
+    {
+      "source": "Frontend",
+      "target": "Tailwind CSS",
+      "category": "Frontend"
+    },
+    {
+      "source": "Frontend",
+      "target": "Framer Motion",
+      "category": "Frontend"
+    },
+    {
+      "source": "center",
+      "target": "Backend"
+    },
+    {
+      "source": "Backend",
+      "target": "Node.js",
+      "category": "Backend"
+    },
+    {
+      "source": "Backend",
+      "target": "REST APIs",
+      "category": "Backend"
+    },
+    {
+      "source": "center",
+      "target": "Cloud & Tools"
+    },
+    {
+      "source": "Cloud & Tools",
+      "target": "Git",
+      "category": "Cloud & Tools"
+    },
+    {
+      "source": "Cloud & Tools",
+      "target": "GitHub",
+      "category": "Cloud & Tools"
+    },
+    {
+      "source": "Cloud & Tools",
+      "target": "Linux",
+      "category": "Cloud & Tools"
+    },
+    {
+      "source": "Cloud & Tools",
+      "target": "Vercel",
+      "category": "Cloud & Tools"
+    }
+  ]
+}

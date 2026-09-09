@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { PageContainer } from "@/components/layout/page-container";
+import { SkillsGrid } from "./SkillsGrid";
 
 const STAGGER_MS = 100;
 const DURATION_S = 0.6;
@@ -21,33 +22,6 @@ const fadeUp: Variants = {
   }),
 };
 
-type SkillCategory = {
-  title: string;
-  skills: string[];
-};
-
-const SKILL_CATEGORIES: SkillCategory[] = [
-  {
-    title: "Frontend",
-    skills: [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "JavaScript",
-      "Tailwind CSS",
-      "Framer Motion",
-    ],
-  },
-  {
-    title: "Backend",
-    skills: ["Node.js", "REST APIs"],
-  },
-  {
-    title: "Cloud & Tools",
-    skills: ["Git", "GitHub", "Linux", "Vercel"],
-  },
-];
-
 export function SkillsSection() {
   const shouldReduceMotion = useReducedMotion();
   const initial = shouldReduceMotion ? "visible" : "hidden";
@@ -61,7 +35,7 @@ export function SkillsSection() {
             className="skills__header"
             initial={initial}
             whileInView="visible"
-            viewport={{ once: true, margin: "-10%" }}
+            viewport={{ once: true, amount: 0.3 }}
             variants={fadeUp}
             custom={0}
           >
@@ -75,39 +49,26 @@ export function SkillsSection() {
               className="skills__statement"
               initial={initial}
               whileInView="visible"
-              viewport={{ once: true, margin: "-10%" }}
+              viewport={{ once: true, amount: 0.3 }}
               variants={fadeUp}
               custom={STAGGER_MS}
             >
               Tools I use to build things.
             </motion.p>
-
-            <div className="skills__categories">
-              {SKILL_CATEGORIES.map((category, index) => (
-                <motion.div
-                  key={category.title}
-                  className="skills__category"
-                  initial={initial}
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-10%" }}
-                  variants={fadeUp}
-                  custom={STAGGER_MS * (2 + index)}
-                >
-                  <h3 className="skills__category-title">{category.title}</h3>
-                  <ul className="skills__list">
-                    {category.skills.map((skill) => (
-                      <li key={skill} className="skills__item">
-                        {skill}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
-            </div>
+            
+            <motion.div 
+              className="w-full md:w-[120%] md:ml-[-10%]"
+              initial={initial}
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={fadeUp}
+              custom={STAGGER_MS * 4}
+            >
+              <SkillsGrid />
+            </motion.div>
           </div>
         </div>
       </PageContainer>
     </section>
   );
 }
-
