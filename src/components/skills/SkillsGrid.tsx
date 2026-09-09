@@ -2,12 +2,15 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import { 
-  Atom, Triangle, FileCode2, FileJson, Wind, Paintbrush, 
-  Box, Code, Database, GitBranch, Cloud, Zap, Flame, Cpu,
-  Server
-} from "lucide-react";
+import {
+  AwsCloudIcon, CssIcon, FirebaseIcon, GitIcon,
+  JavascriptIcon, LaravelIcon, MysqlIcon, NextdotjsIcon,
+  PhpIcon, ReactIcon, SupabaseIcon, TailwindCssIcon,
+  TypescriptIcon, VercelIcon
+} from "../icons/CustomIcons";
+import { Cpu, Server} from "lucide-react";
 
 type HexNode = {
   id: string;
@@ -16,7 +19,7 @@ type HexNode = {
   category?: string;
   col: number;
   row: number;
-  icon?: React.ElementType;
+  icon?: React.ElementType | string;
 };
 
 // Pointy-topped hex math
@@ -44,26 +47,26 @@ const ACTIVE_NODES: HexNode[] = [
   { id: 'Tools', label: 'Tools', type: 'category', category: 'Tools', col: 0.5, row: 1 },
 
   // FRONTEND BRANCH
-  { id: 'React', label: 'React', type: 'skill', category: 'Frontend', col: -0.5, row: -1, icon: Atom },
-  { id: 'Next.js', label: 'Next.js', type: 'skill', category: 'Frontend', col: 0.5, row: -1, icon: Triangle },
-  { id: 'Tailwind', label: 'Tailwind CSS', type: 'skill', category: 'Frontend', col: -1, row: -2, icon: Wind },
-  { id: 'CSS', label: 'CSS', type: 'skill', category: 'Frontend', col: 0, row: -2, icon: Paintbrush },
-  { id: 'TypeScript', label: 'TypeScript', type: 'skill', category: 'Frontend', col: 1, row: -2, icon: FileCode2 },
-  { id: 'JavaScript', label: 'JavaScript', type: 'skill', category: 'Frontend', col: -0.5, row: -3, icon: FileJson },
+  { id: 'React', label: 'React', type: 'skill', category: 'Frontend', col: -0.5, row: -1, icon: ReactIcon },
+  { id: 'Next.js', label: 'Next.js', type: 'skill', category: 'Frontend', col: 0.5, row: -1, icon: NextdotjsIcon },
+  { id: 'Tailwind', label: 'Tailwind CSS', type: 'skill', category: 'Frontend', col: -1, row: -2, icon: TailwindCssIcon },
+  { id: 'CSS', label: 'CSS', type: 'skill', category: 'Frontend', col: 0, row: -2, icon: CssIcon },
+  { id: 'TypeScript', label: 'TypeScript', type: 'skill', category: 'Frontend', col: 1, row: -2, icon: TypescriptIcon },
+  { id: 'JavaScript', label: 'JavaScript', type: 'skill', category: 'Frontend', col: -0.5, row: -3, icon: JavascriptIcon },
 
   // BACKEND BRANCH
-  { id: 'PHP', label: 'PHP', type: 'skill', category: 'Backend', col: -1.5, row: 1, icon: Code },
-  { id: 'Laravel', label: 'Laravel', type: 'skill', category: 'Backend', col: -1, row: 2, icon: Box },
-  { id: 'PostgreSQL', label: 'PostgreSQL', type: 'skill', category: 'Backend', col: -2, row: 2, icon: Database },
-  { id: 'MySQL', label: 'MySQL', type: 'skill', category: 'Backend', col: -2.5, row: 1, icon: Server },
+  { id: 'PHP', label: 'PHP', type: 'skill', category: 'Backend', col: -1.5, row: 1, icon: PhpIcon },
+  { id: 'Laravel', label: 'Laravel', type: 'skill', category: 'Backend', col: -1, row: 2, icon: LaravelIcon },
+  { id: 'PostgreSQL', label: 'PostgreSQL', type: 'skill', category: 'Backend', col: -2, row: 2, icon: Server },
+  { id: 'MySQL', label: 'MySQL', type: 'skill', category: 'Backend', col: -2.5, row: 1, icon: MysqlIcon },
 
   // TOOLS BRANCH
-  { id: 'Git', label: 'Git', type: 'skill', category: 'Tools', col: 1.5, row: 1, icon: GitBranch },
-  { id: 'Vercel', label: 'Vercel', type: 'skill', category: 'Tools', col: 1, row: 2, icon: Triangle },
-  { id: 'Supabase', label: 'Supabase', type: 'skill', category: 'Tools', col: 2.5, row: 1, icon: Zap },
-  { id: 'AWS', label: 'AWS', type: 'skill', category: 'Tools', col: 2, row: 2, icon: Cloud },
-  { id: 'Firebase', label: 'Firebase', type: 'skill', category: 'Tools', col: 3.5, row: 1, icon: Flame },
-  { id: 'Groq', label: 'Groq', type: 'skill', category: 'Tools', col: 3, row: 2, icon: Cpu },
+  { id: 'Git', label: 'Git', type: 'skill', category: 'Tools', col: 1.5, row: 1, icon: GitIcon },
+  { id: 'Vercel', label: 'Vercel', type: 'skill', category: 'Tools', col: 1, row: 2, icon: VercelIcon },
+  { id: 'Supabase', label: 'Supabase', type: 'skill', category: 'Tools', col: 2.5, row: 1, icon: SupabaseIcon },
+  { id: 'AWS', label: 'AWS', type: 'skill', category: 'Tools', col: 2, row: 2, icon: AwsCloudIcon },
+  { id: 'Firebase', label: 'Firebase', type: 'skill', category: 'Tools', col: 3.5, row: 1, icon: FirebaseIcon },
+  { id: 'Groq', label: 'Groq', type: 'skill', category: 'Tools', col: 3, row: 2, icon: Cpu},
 ];
 
 const SKILL_NODES = [...ACTIVE_NODES];
@@ -189,8 +192,12 @@ export function SkillsGrid() {
                     />
                     
                     {isSkill && Icon && (
-                      <g style={{ color: isActive ? "var(--color-accent)" : "var(--color-text-secondary)", transition: "color 0.3s ease" }}>
-                        <Icon x="-20" y="-32" width="40" height="40" strokeWidth={isActive ? 1.5 : 1.25} style={{ pointerEvents: 'none' }} />
+                      <g style={{ color: isActive ? "var(--color-accent)" : "white", transition: "color 0.3s ease" }}>
+                        {typeof Icon === 'string' ? (
+                          <image href={Icon} x="-20" y="-32" width="40" height="40" style={{ pointerEvents: 'none' }} />
+                        ) : (
+                          <Icon x="-20" y="-32" width="40" height="40" strokeWidth={isActive ? 1.5 : 1.25} style={{ pointerEvents: 'none' }} />
+                        )}
                       </g>
                     )}
 
@@ -239,7 +246,11 @@ export function SkillsGrid() {
                 const Icon = skill.icon;
                 return (
                   <div key={skill.id} className="flex items-center gap-2 bg-white/5 border border-(--color-border-strong) rounded-lg px-3 py-2 text-sm text-(--color-text-primary)">
-                    {Icon && <Icon className="w-4 h-4 text-(--color-text-secondary)" />}
+                    {Icon && (
+                      typeof Icon === 'string' 
+                        ? <Image src={Icon} alt="" width={16} height={16} className="w-4 h-4" /> 
+                        : <Icon className="w-4 h-4 text-white" />
+                    )}
                     {skill.label}
                   </div>
                 );
