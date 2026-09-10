@@ -8,9 +8,9 @@ import {
   AwsCloudIcon, CssIcon, FirebaseIcon, GitIcon,
   JavascriptIcon, LaravelIcon, MysqlIcon, NextdotjsIcon,
   PhpIcon, ReactIcon, SupabaseIcon, TailwindCssIcon,
-  TypescriptIcon, VercelIcon
+  TypescriptIcon, VercelIcon, NodejsIcon
 } from "../icons/CustomIcons";
-import { Cpu, Server } from "lucide-react";
+import { Cpu, Server, Network } from "lucide-react";
 
 type HexNode = {
   id: string;
@@ -59,6 +59,8 @@ const ACTIVE_NODES: HexNode[] = [
   { id: 'Laravel', label: 'Laravel', type: 'skill', category: 'Backend', col: -1, row: 2, icon: LaravelIcon },
   { id: 'PostgreSQL', label: 'PostgreSQL', type: 'skill', category: 'Backend', col: -2, row: 2, icon: Server },
   { id: 'MySQL', label: 'MySQL', type: 'skill', category: 'Backend', col: -2.5, row: 1, icon: MysqlIcon },
+  { id: 'Node.js', label: 'Node.js', type: 'skill', category: 'Backend', col: -3, row: 2, icon: NodejsIcon },
+  { id: 'REST API', label: 'REST API', type: 'skill', category: 'Backend', col: -3.5, row: 1, icon: Network },
 
   // TOOLS BRANCH
   { id: 'Git', label: 'Git', type: 'skill', category: 'Tools', col: 1.5, row: 1, icon: GitIcon },
@@ -165,6 +167,7 @@ export function SkillsGrid() {
                   }}
                 >
                   <motion.g
+                    initial={{ opacity: opacity }}
                     animate={{
                       opacity: opacity,
                       scale: isActive && !isCategory && !shouldReduceMotion ? 1.05 : 1

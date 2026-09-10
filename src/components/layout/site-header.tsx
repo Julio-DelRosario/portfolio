@@ -4,6 +4,7 @@ import { useState } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { FileText, Menu, X } from "lucide-react";
 import { CONTACT_DATA } from "@/data/contact";
+import Link from "next/link";
 
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -21,11 +22,11 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 const navigationItems = [
-  { href: "#about", label: "About" },
-  { href: "#skills", label: "Skills" },
-  { href: "#projects", label: "Projects" },
-  { href: "#experience", label: "Experience" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#about", label: "About" },
+  { href: "/#skills", label: "Skills" },
+  { href: "/#projects", label: "Projects" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#contact", label: "Contact" },
 ] as const;
 
 export function SiteHeader() {
@@ -35,9 +36,9 @@ export function SiteHeader() {
     <header className="site-header border-b sticky top-0 z-50 bg-(--color-canvas)/90 backdrop-blur-md">
       <PageContainer className="flex flex-wrap items-center justify-between py-3 min-h-16 sm:min-h-20 relative">
         <div className="flex items-center">
-          <a className="brand-link" href="#main-content" aria-label="Julio's — home">
+          <Link className="brand-link" href="/#main-content" aria-label="Julio's — home">
             Julio&apos;s
-          </a>
+          </Link>
         </div>
 
         <div className="flex items-center gap-3 sm:gap-4 order-2 lg:order-3 ml-auto lg:ml-0">
@@ -67,13 +68,13 @@ export function SiteHeader() {
           <ul className="flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-6 w-full pb-4 lg:pb-0">
             {navigationItems.map((item) => (
               <li key={item.href}>
-                <a 
+                <Link 
                   className="nav-link text-lg lg:text-base font-medium" 
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
             <li className="lg:hidden flex items-center gap-4 mt-2">

@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useReducedMotion, useScroll, useMotionValueEvent } from "framer-motion";
@@ -31,106 +32,8 @@ function ProjectLinkIcon({ type }: { type: string }) {
   return <ExternalLink className="w-4 h-4" />;
 }
 
-function LockedHexagon() {
-  const pts = "41.569,0 83.138,24 83.138,72 41.569,96 0,72 0,24";
-  return (
-    <div className="navigator-hex-group" style={{ opacity: 1, pointerEvents: 'none' }}>
-      <div className="navigator-hex">
-        <svg className="navigator-hex__svg" viewBox="-2 -2 87.138 100" style={{ overflow: "visible" }}>
-          <polygon transform="translate(2, 2)" points={pts} style={{ fill: 'rgba(255, 255, 255, 0.02)', stroke: 'rgba(255, 255, 255, 0.1)', strokeWidth: 1 }} vectorEffect="non-scaling-stroke" />
-        </svg>
-      </div>
-    </div>
-  );
-}
+import { ProjectNavigator } from "./ProjectNavigator";
 
-function NavigatorHexagon({
-  index,
-  isActive,
-  title,
-  logoUrl,
-  logoStyle = 'monochrome',
-  onClick,
-}: {
-  index: number;
-  isActive: boolean;
-  title: string;
-  logoUrl?: string;
-  logoStyle?: "monochrome" | "color";
-  onClick: () => void;
-}) {
-  const row = index % 2;
-  
-  const pts = "41.569,0 83.138,24 83.138,72 41.569,96 0,72 0,24";
-
-  return (
-    <div className={`navigator-hex-group ${isActive ? "navigator-hex-group--active" : "navigator-hex-group--inactive"}`}>
-      {row === 0 && (
-        <div className="navigator-label navigator-label--top">
-          <div className="navigator-label__text">{title}</div>
-          <div className="navigator-label__line" />
-        </div>
-      )}
-
-      <button
-        className={`navigator-hex ${isActive ? "navigator-hex--active" : "navigator-hex--inactive"}`}
-        onClick={onClick}
-        aria-label={`Select Project ${title}`}
-        aria-pressed={isActive}
-      >
-        <svg className="navigator-hex__svg" viewBox="-2 -2 87.138 100" style={{ overflow: "visible" }}>
-          <polygon transform="translate(2, 2)" points={pts} className="navigator-hex__shape" vectorEffect="non-scaling-stroke" />
-        </svg>
-        <div className="navigator-hex__content">
-          {logoUrl ? (
-            logoStyle === 'color' ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img 
-                src={logoUrl} 
-                alt={`${title} logo`} 
-                style={{ 
-                  width: '40px', 
-                  height: '40px', 
-                  objectFit: 'contain',
-                  filter: isActive ? 'none' : 'grayscale(100%) opacity(0.6)',
-                  transition: 'filter 0.3s ease'
-                }} 
-              />
-            ) : (
-              <div 
-                className="navigator-hex__logo"
-                aria-label={`${title} logo`}
-                style={{ 
-                  width: '40px', 
-                  height: '40px', 
-                  WebkitMaskImage: `url(${logoUrl})`,
-                  WebkitMaskSize: 'contain',
-                  WebkitMaskRepeat: 'no-repeat',
-                  WebkitMaskPosition: 'center',
-                  maskImage: `url(${logoUrl})`,
-                  maskSize: 'contain',
-                  maskRepeat: 'no-repeat',
-                  maskPosition: 'center'
-                }} 
-              />
-            )
-          ) : (
-            <span className="navigator-hex__label" style={{ fontFamily: 'var(--font-sans)', fontSize: '1.25rem', fontWeight: 700 }}>
-              {title.charAt(0)}
-            </span>
-          )}
-        </div>
-      </button>
-
-      {row === 1 && (
-        <div className="navigator-label navigator-label--bottom">
-          <div className="navigator-label__line" />
-          <div className="navigator-label__text">{title}</div>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export function ProjectsSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -140,7 +43,6 @@ export function ProjectsSection() {
   const activeIndexRef = useRef(activeIndex);
   
   const sectionRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
   const infoScrollRef = useRef<HTMLDivElement>(null);
   const lastInteractionTime = useRef<number>(0);
   
@@ -158,40 +60,9 @@ export function ProjectsSection() {
     }
   }, [activeIndex]);
 
-  const R = 48;
-  const W = R * Math.sqrt(3); 
-  const H = 2 * R;            
-  const SPACING_FACTOR = 1.0; 
-  const labelHeight = 32;     
-  
-  const renderHexCount = Math.max(9, numProjects);
-  const maxCol = Math.floor((renderHexCount - 1) / 2);
-  const totalWidth = (maxCol * W + 0.5 * W) * SPACING_FACTOR + W * 1.5; 
-  const totalHeight = (1.5 * R) * SPACING_FACTOR + H + labelHeight * 2;
-
-  const getProjectCx = useCallback((index: number) => {
-    const row = index % 2;
-    const col = Math.floor(index / 2);
-    const basePathX = col * W + (row === 1 ? 0.5 * W : 0);
-    return basePathX * SPACING_FACTOR + 0.5 * W;
-  }, [W, SPACING_FACTOR]);
-
   const markInteraction = useCallback(() => {
     lastInteractionTime.current = Date.now();
   }, []);
-
-  // Sync scrollable grid to perfectly center the active hexagon
-  useEffect(() => {
-    if (!scrollRef.current) return;
-    const cx = getProjectCx(activeIndex);
-    const containerWidth = scrollRef.current.clientWidth;
-    const targetScroll = cx - containerWidth / 2;
-    
-    scrollRef.current.scrollTo({
-      left: Math.max(0, targetScroll),
-      behavior: shouldReduceMotion ? "auto" : "smooth"
-    });
-  }, [activeIndex, getProjectCx, shouldReduceMotion]);
 
   // Framer Motion Scroll Progress for Scroll-Pinning (Sticky)
   const { scrollYProgress } = useScroll({
@@ -297,52 +168,17 @@ export function ProjectsSection() {
                   viewport={{ once: true, margin: "-10%" }}
                   variants={fadeUp}
                   custom={STAGGER_MS * 2}
+                  onClick={markInteraction}
+                  onTouchStart={markInteraction}
                 >
-                  <div 
-                    className="projects__navigator-scroll"
-                    ref={scrollRef}
-                    onClick={markInteraction}
-                    onTouchStart={markInteraction}
-                  >
-                    <div 
-                      className="projects__navigator-canvas" 
-                      style={{ width: totalWidth, height: totalHeight, margin: '0 auto' }}
-                    >
-                      {Array.from({ length: renderHexCount }).map((_, i) => {
-                        const project = PROJECTS[i];
-                        const row = i % 2;
-                        const cx = getProjectCx(i);
-                        const cy = (row * 1.5 * R) * SPACING_FACTOR + labelHeight;
-                        
-                        const left = cx - 0.5 * W;
-                        const top = cy;
-
-                        return (
-                          <div
-                            key={project ? project.id : `locked-${i}`}
-                            className="navigator-hex-container"
-                            style={{ left, top, width: W, height: H }}
-                          >
-                            {project ? (
-                              <NavigatorHexagon 
-                                index={i} 
-                                isActive={activeIndex === i}
-                                title={project.title}
-                                logoUrl={project.logoUrl}
-                                logoStyle={project.logoStyle}
-                                onClick={() => {
-                                  markInteraction();
-                                  scrollWindowToIndex(i);
-                                }}
-                              />
-                            ) : (
-                              <LockedHexagon />
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+                  <ProjectNavigator
+                    projects={PROJECTS}
+                    activeIndex={activeIndex}
+                    onProjectSelect={(i) => {
+                      markInteraction();
+                      scrollWindowToIndex(i);
+                    }}
+                  />
                 </motion.div>
                 </div>
 
@@ -435,17 +271,16 @@ export function ProjectsSection() {
                           )}
                           
                           <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                            <a 
-                              href="#" 
+                            <Link 
+                              href={`/projects/${activeProject.id}`}
                               className="project-details__view-more"
-                              onClick={(e) => e.preventDefault()} // Placeholder action
                             >
                               View Project Details
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '0.5rem', transition: 'transform 0.2s' }}>
                                 <path d="M5 12h14" />
                                 <path d="m12 5 7 7-7 7" />
                               </svg>
-                            </a>
+                            </Link>
                           </div>
 
 

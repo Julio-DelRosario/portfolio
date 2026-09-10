@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { NAV_LINKS, CONTACT_DATA } from "@/data/contact";
@@ -20,9 +21,9 @@ export function SiteFooter() {
             <ul className="footer__nav-list">
               {NAV_LINKS.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="footer__nav-link">
+                  <Link href={link.href} className="footer__nav-link">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
