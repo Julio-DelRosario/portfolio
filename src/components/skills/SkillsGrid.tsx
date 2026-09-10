@@ -10,7 +10,7 @@ import {
   PhpIcon, ReactIcon, SupabaseIcon, TailwindCssIcon,
   TypescriptIcon, VercelIcon
 } from "../icons/CustomIcons";
-import { Cpu, Server} from "lucide-react";
+import { Cpu, Server } from "lucide-react";
 
 type HexNode = {
   id: string;
@@ -130,9 +130,9 @@ export function SkillsGrid() {
             let opacity = 1;
 
             if (isCategory) {
-              fillColor = "var(--color-accent)";
+              fillColor = "rgba(224, 169, 109, 0.08)";
               strokeColor = "var(--color-accent)";
-              textColor = "var(--color-background)";
+              textColor = "var(--color-accent)";
             } else {
               fillColor = "rgba(255, 255, 255, 0.02)"; 
               strokeColor = "var(--color-border-strong)"; 
@@ -178,18 +178,42 @@ export function SkillsGrid() {
                     role="button"
                     aria-label={`${node.label} (${node.category} category)`}
                   >
-                    <motion.path 
-                      d={HEX_PATH}
-                      fill={fillColor}
-                      stroke={strokeColor}
-                      strokeWidth={isActive ? 2 : 1.5}
-                      animate={{
-                        fill: fillColor,
-                        stroke: strokeColor,
-                        strokeWidth: isActive ? 2 : 1.5
-                      }}
-                      transition={{ duration: 0.5 }}
-                    />
+                    {isCategory ? (
+                      <>
+                        <motion.path 
+                          d={HEX_PATH}
+                          fill="rgba(224, 169, 109, 0.08)"
+                          stroke="var(--color-accent)"
+                          strokeWidth={2.5}
+                          animate={{
+                            fill: "rgba(224, 169, 109, 0.08)",
+                            stroke: "var(--color-accent)",
+                            strokeWidth: 2.5
+                          }}
+                        />
+                        <motion.path 
+                          d={HEX_PATH}
+                          fill="transparent"
+                          stroke="var(--color-accent)"
+                          strokeWidth={1}
+                          opacity={0.3}
+                          transform="scale(0.85)"
+                        />
+                      </>
+                    ) : (
+                      <motion.path 
+                        d={HEX_PATH}
+                        fill={fillColor}
+                        stroke={strokeColor}
+                        strokeWidth={isActive ? 2 : 1.5}
+                        animate={{
+                          fill: fillColor,
+                          stroke: strokeColor,
+                          strokeWidth: isActive ? 2 : 1.5
+                        }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    )}
                     
                     {isSkill && Icon && (
                       <g style={{ color: isActive ? "var(--color-accent)" : "white", transition: "color 0.3s ease" }}>
@@ -205,7 +229,7 @@ export function SkillsGrid() {
                         textAnchor="middle" 
                         alignmentBaseline="middle"
                         fill={textColor}
-                        fontSize={isCategory ? "26px" : "22px"}
+                        fontSize={isCategory ? "24px" : "22px"}
                         fontWeight={isCategory ? "700" : "600"}
                         letterSpacing={isCategory ? "0.05em" : "normal"}
                         y={isCategory ? 0 : 38}
