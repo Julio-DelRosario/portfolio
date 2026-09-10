@@ -141,6 +141,7 @@ export function ProjectsSection() {
   
   const sectionRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const infoScrollRef = useRef<HTMLDivElement>(null);
   const lastInteractionTime = useRef<number>(0);
   
   const activeProject = PROJECTS[activeIndex] || PROJECTS[0];
@@ -152,6 +153,9 @@ export function ProjectsSection() {
 
   useEffect(() => {
     activeIndexRef.current = activeIndex;
+    if (infoScrollRef.current) {
+      infoScrollRef.current.scrollTop = 0;
+    }
   }, [activeIndex]);
 
   const R = 48;
@@ -268,7 +272,7 @@ export function ProjectsSection() {
                 </h2>
               </motion.div>
 
-              <div className="projects__content-area">
+              <div className="projects__content-area" style={{ minWidth: 0, overflow: 'hidden' }}>
                 <motion.div
                   initial={initial}
                   whileInView="visible"
@@ -284,10 +288,10 @@ export function ProjectsSection() {
 
 
                 {/* Top: Honeycomb Navigation */}
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.5rem' }}>
+                <div className="w-full max-w-full" style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.5rem', minWidth: 0 }}>
                   {/* Hexagon Navigator Area */}
                 <motion.div 
-                  className="projects__navigator-wrapper" style={{ flex: "0 0 auto", margin: 0 }}
+                  className="projects__navigator-wrapper w-full max-w-full" style={{ margin: 0, minWidth: 0 }}
                   initial={initial}
                   whileInView="visible"
                   viewport={{ once: true, margin: "-10%" }}
@@ -343,7 +347,7 @@ export function ProjectsSection() {
                 </div>
 
                 {/* Bottom: Two-Column Layout */}
-                <div className="projects__selected-info">
+                <div className="projects__selected-info" ref={infoScrollRef}>
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={activeProject.id}

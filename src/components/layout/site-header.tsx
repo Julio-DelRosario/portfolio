@@ -1,5 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import { PageContainer } from "@/components/layout/page-container";
-import { FileText } from "lucide-react";
+import { FileText, Menu, X } from "lucide-react";
 import { CONTACT_DATA } from "@/data/contact";
 
 
@@ -26,39 +29,64 @@ const navigationItems = [
 ] as const;
 
 export function SiteHeader() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <header className="site-header border-b sticky top-0 z-50 bg-(--color-canvas)/90 backdrop-blur-md">
-      <PageContainer className="grid grid-cols-2 lg:grid-cols-[1fr_auto_1fr] items-center gap-y-4 py-3 min-h-16 sm:min-h-20">
-        <div className="flex justify-start">
+      <PageContainer className="flex flex-wrap items-center justify-between py-3 min-h-16 sm:min-h-20 relative">
+        <div className="flex items-center">
           <a className="brand-link" href="#main-content" aria-label="Julio's — home">
             Julio&apos;s
           </a>
         </div>
 
-        <nav aria-label="Primary navigation" className="order-3 lg:order-2 col-span-2 lg:col-span-1 flex justify-center w-full">
-          <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6">
-            {navigationItems.map((item) => (
-              <li key={item.href}>
-                <a className="nav-link" href={item.href}>
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        
-        <div className="flex items-center justify-end gap-3 sm:gap-4 order-2 lg:order-3">
-          <a href={CONTACT_DATA.socials[0].url} target="_blank" rel="noopener noreferrer" className="text-(--color-text-tertiary) hover:text-(--color-accent) transition-colors" aria-label="GitHub">
+        <div className="flex items-center gap-3 sm:gap-4 order-2 lg:order-3 ml-auto lg:ml-0">
+          <a href={CONTACT_DATA.socials[0].url} target="_blank" rel="noopener noreferrer" className="hidden sm:flex text-(--color-text-tertiary) hover:text-(--color-accent) transition-colors" aria-label="GitHub">
             <GithubIcon className="w-5 h-5" />
           </a>
-          <a href={CONTACT_DATA.socials[1].url} target="_blank" rel="noopener noreferrer" className="text-(--color-text-tertiary) hover:text-(--color-accent) transition-colors" aria-label="LinkedIn">
+          <a href={CONTACT_DATA.socials[1].url} target="_blank" rel="noopener noreferrer" className="hidden sm:flex text-(--color-text-tertiary) hover:text-(--color-accent) transition-colors" aria-label="LinkedIn">
             <LinkedinIcon className="w-5 h-5" />
           </a>
           <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium text-(--color-text-primary) hover:text-(--color-accent) transition-colors border border-(--color-border-subtle) rounded-full px-4 py-1.5 hover:border-(--color-accent)">
             <FileText className="w-4 h-4" />
-            <span className="hidden sm:inline">Resume</span>
+            <span>Resume</span>
           </a>
+          <button 
+            className="lg:hidden p-2 text-(--color-text-secondary) hover:text-(--color-accent) transition-colors"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle mobile menu"
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
+
+        <nav 
+          aria-label="Primary navigation" 
+          className={`${isMobileMenuOpen ? 'flex' : 'hidden'} lg:flex w-full lg:w-auto order-3 lg:order-2 lg:absolute lg:left-1/2 lg:-translate-x-1/2 pt-4 lg:pt-0`}
+        >
+          <ul className="flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-6 w-full pb-4 lg:pb-0">
+            {navigationItems.map((item) => (
+              <li key={item.href}>
+                <a 
+                  className="nav-link text-lg lg:text-base font-medium" 
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))}
+            <li className="lg:hidden flex items-center gap-4 mt-2">
+              <a href={CONTACT_DATA.socials[0].url} target="_blank" rel="noopener noreferrer" className="text-(--color-text-tertiary) hover:text-(--color-accent) transition-colors" aria-label="GitHub">
+                <GithubIcon className="w-6 h-6" />
+              </a>
+              <a href={CONTACT_DATA.socials[1].url} target="_blank" rel="noopener noreferrer" className="text-(--color-text-tertiary) hover:text-(--color-accent) transition-colors" aria-label="LinkedIn">
+                <LinkedinIcon className="w-6 h-6" />
+              </a>
+            </li>
+          </ul>
+        </nav>
+        
       </PageContainer>
     </header>
   );

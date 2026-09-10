@@ -96,8 +96,8 @@ export function HeroContent() {
         animate={animate}
         custom={STAGGER_MS * 3}
       >
-        I enjoy building web applications and figuring out how all <br/> 
-        the pieces fit together. I care about making software that <br/>
+        I enjoy building web applications and figuring out how all 
+        the pieces fit together. I care about making software that 
         works well, makes sense, and is actually useful.
       </motion.p>
 
@@ -109,7 +109,7 @@ export function HeroContent() {
         animate={animate}
         custom={STAGGER_MS * 4}
       >
-        <a className="ds-button ds-button--primary ds-button--lg" href="#work">
+        <a className="ds-button ds-button--primary ds-button--lg" href="#projects">
           View my Work
         </a>
         <a

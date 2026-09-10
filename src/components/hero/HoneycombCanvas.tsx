@@ -61,6 +61,7 @@ export function HoneycombCanvas() {
   const twinklesRef = useRef<TwinkleEntry[]>([]);
   const twinkleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reducedMotionRef = useRef(false);
+  const touchRipplesRef = useRef<{ x: number; y: number; startTime: number }[]>([]);
 
   // ---- Build / rebuild grid for current canvas size ----
   const buildGrid = useCallback(() => {
@@ -87,6 +88,7 @@ export function HoneycombCanvas() {
       reducedMotionRef.current = motionQuery.matches;
       if (motionQuery.matches) {
         pointerRef.current = null;
+        touchRipplesRef.current = [];
       }
     };
     motionQuery.addEventListener("change", handleMotionChange);
@@ -115,8 +117,31 @@ export function HoneycombCanvas() {
     const handlePointerLeave = () => {
       pointerRef.current = null;
     };
+    
+    const handleClick = (e: MouseEvent | PointerEvent) => {
+      if (reducedMotionRef.current) return;
+
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const inBounds =
+        e.clientX >= rect.left &&
+        e.clientX <= rect.right &&
+        e.clientY >= rect.top &&
+        e.clientY <= rect.bottom;
+
+      if (inBounds) {
+        touchRipplesRef.current.push({
+          x: e.clientX,
+          y: e.clientY,
+          startTime: performance.now(),
+        });
+      }
+    };
 
     window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("click", handleClick);
     // Clear when cursor leaves the browser window entirely
     document.addEventListener("pointerleave", handlePointerLeave);
 
@@ -207,8 +232,52 @@ export function HoneycombCanvas() {
         computeTwinkleIntensities(twinklesRef.current, now);
       twinklesRef.current = activeTwinkles;
 
+      // Touch ripples
+      const touchMap = new Map<number, number>();
+      const TOUCH_DURATION = 1200;
+      const activeRipples: { x: number; y: number; startTime: number }[] = [];
+      const canvasRect = canvas.getBoundingClientRect();
+
+      for (const ripple of touchRipplesRef.current) {
+        const elapsed = now - ripple.startTime;
+        if (elapsed > TOUCH_DURATION) continue;
+        activeRipples.push(ripple);
+
+        const cx = ripple.x - canvasRect.left;
+        const cy = ripple.y - canvasRect.top;
+        // Expanding ring calculation
+        const RIPPLE_MAX_RADIUS = grid.cellRadius * 10;
+        const RIPPLE_THICKNESS = grid.cellRadius * 2.5;
+        const progress = elapsed / TOUCH_DURATION;
+        const currentRadius = progress * RIPPLE_MAX_RADIUS;
+        
+        // Fade out as it expands
+        const fadeT = 1 - progress;
+        const fadeFactor = fadeT * fadeT * (3 - 2 * fadeT);
+        
+        for (let i = 0; i < grid.cells.length; i++) {
+          const cell = grid.cells[i];
+          const dx = cx - cell.cx;
+          const dy = cy - cell.cy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          const distanceToRing = Math.abs(dist - currentRadius);
+          
+          if (distanceToRing < RIPPLE_THICKNESS) {
+            const t = 1 - distanceToRing / RIPPLE_THICKNESS;
+            const intensity = t * t * (3 - 2 * t) * fadeFactor * 2.0;
+            
+            if (intensity > 0.005) {
+               const existing = touchMap.get(cell.index) ?? 0;
+               touchMap.set(cell.index, Math.max(existing, intensity));
+            }
+          }
+        }
+      }
+      touchRipplesRef.current = activeRipples;
+
       // Merge all intensity sources (cursor wins via max)
-      const activeMap = mergeIntensityMaps(cursorMap, pulseMap, twinkleMap);
+      const activeMap = mergeIntensityMaps(cursorMap, pulseMap, twinkleMap, touchMap);
 
       drawHoneycomb(ctx, grid, activeMap);
 
@@ -238,6 +307,7 @@ export function HoneycombCanvas() {
       resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("click", handleClick);
       document.removeEventListener("pointerleave", handlePointerLeave);
       motionQuery.removeEventListener("change", handleMotionChange);
     };

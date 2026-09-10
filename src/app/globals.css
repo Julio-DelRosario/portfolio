@@ -603,7 +603,7 @@ a {
 
 .about__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-6);
   padding: clamp(5rem, 12vh, 8rem) 0;
 }
@@ -692,7 +692,7 @@ a {
 
 .skills__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-6);
   padding: clamp(5rem, 12vh, 2rem) 0;
 }
@@ -721,7 +721,7 @@ a {
 
 .skills__category {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-2);
   padding: var(--space-6) 0;
   border-top: 1px solid var(--color-border-subtle);
@@ -787,7 +787,7 @@ a {
 
 .projects__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-6);
   padding: clamp(5rem, 12vh, 8rem) 0;
 }
@@ -1152,7 +1152,7 @@ a {
 
 .experience__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-6);
   padding: clamp(5rem, 12vh, 8rem) 0;
 }
@@ -1383,7 +1383,7 @@ a {
 
 .contact__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--space-6);
   padding: clamp(5rem, 12vh, 8rem) 0;
 }
