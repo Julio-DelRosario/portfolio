@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Portfolio",
+  title: "Julio's",
   description: "A personal portfolio.",
 };
 
