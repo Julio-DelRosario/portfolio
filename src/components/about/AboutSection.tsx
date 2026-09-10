@@ -74,7 +74,7 @@ export function AboutSection() {
               variants={fadeUp}
               custom={STAGGER_MS}
             >
-              I like building things that are useful, not just impressive.
+              A little about how I work.
             </motion.p>
             
             <motion.p 
@@ -85,8 +85,10 @@ export function AboutSection() {
               variants={fadeUp}
               custom={STAGGER_MS * 2}
             >
-              I focus on solving real problems through clean architecture and thoughtful product design. 
-              Software shouldn&apos;t just work—it should make sense for the people using it and the systems supporting it.
+              I enjoy taking an idea and figuring out how to make it real. Sometimes that means designing the interface,
+              working through the backend or database, or figuring out why something broke in the first place.
+              <br /><br />
+              I care about software being useful and easy to understand, not just technically impressive.
             </motion.p>
             
             {/* Supporting Attributes */}
@@ -101,24 +103,24 @@ export function AboutSection() {
               <div className="about__focus-item">
                 <span className="about__focus-icon"><HexIcon /></span>
                 <div>
-                  <h3 className="about__focus-title">Full-Stack Engineering</h3>
-                  <p className="about__focus-desc">End-to-end development focused on scalable, maintainable architecture.</p>
+                  <h3 className="about__focus-title">I build across the stack.</h3>
+                  <p className="about__focus-desc">From interfaces and APIs to databases and deployment, I enjoy working through the whole problem.</p>
                 </div>
               </div>
               
               <div className="about__focus-item">
                 <span className="about__focus-icon"><HexIcon /></span>
                 <div>
-                  <h3 className="about__focus-title">Product-Minded</h3>
-                  <p className="about__focus-desc">Aligning technical decisions with user needs and practical business outcomes.</p>
+                  <h3 className="about__focus-title">I learn by building.</h3>
+                  <p className="about__focus-desc">Most of what I know came from making projects, breaking things, fixing them, and trying again.</p>
                 </div>
               </div>
 
               <div className="about__focus-item">
                 <span className="about__focus-icon"><HexIcon /></span>
                 <div>
-                  <h3 className="about__focus-title">Systems & Cloud</h3>
-                  <p className="about__focus-desc">Building resilient infrastructure and practical deployment pipelines.</p>
+                  <h3 className="about__focus-title">I care about usefulness.</h3>
+                  <p className="about__focus-desc">I don&apos;t just want a project to work. I care about the users and their experience with the app.</p>
                 </div>
               </div>
             </motion.div>

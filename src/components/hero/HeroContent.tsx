@@ -65,7 +65,17 @@ export function HeroContent() {
         animate={animate}
         custom={0}
       >
-        Julio del Rosario
+        Julio Del Rosario
+      </motion.p>
+
+      <motion.p
+        className="hero__role"
+        variants={fadeSlideUpSmall}
+        initial={initial}
+        animate={animate}
+        custom={STAGGER_MS}
+      >
+        Full-Stack Developer
       </motion.p>
 
       <motion.h1
@@ -74,9 +84,9 @@ export function HeroContent() {
         variants={fadeSlideUp}
         initial={initial}
         animate={animate}
-        custom={STAGGER_MS}
+        custom={STAGGER_MS * 2}
       >
-        Building considered digital experiences.
+        I love building things that are useful, not just impressive.
       </motion.h1>
 
       <motion.p
@@ -84,11 +94,11 @@ export function HeroContent() {
         variants={fadeSlideUpSmall}
         initial={initial}
         animate={animate}
-        custom={STAGGER_MS * 2}
+        custom={STAGGER_MS * 3}
       >
-        I am a software engineer who turns ambitious ideas into clear,
-        dependable products — where thoughtful systems meet purposeful
-        interfaces.
+        I enjoy building web applications and figuring out how all <br/> 
+        the pieces fit together. I care about making software that <br/>
+        works well, makes sense, and is actually useful.
       </motion.p>
 
       <motion.div
@@ -97,16 +107,16 @@ export function HeroContent() {
         variants={fadeSlideUpSmall}
         initial={initial}
         animate={animate}
-        custom={STAGGER_MS * 3}
+        custom={STAGGER_MS * 4}
       >
         <a className="ds-button ds-button--primary ds-button--lg" href="#work">
-          View selected work
+          View my Work
         </a>
         <a
           className="ds-button ds-button--secondary ds-button--lg"
           href="#contact"
         >
-          Start a conversation
+          Build with Julio
         </a>
       </motion.div>
     </div>

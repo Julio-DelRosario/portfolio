@@ -1,6 +1,10 @@
 export const CONTACT_DATA = {
-  heading: "Let's build something worth building.",
-  description: "Whether it's a new product, a technical challenge, or an interesting idea, I'd like to hear about it.",
+  heading: "Have something worth building?",
+  description: 
+  `I'm always interested in working on a useful idea, 
+  learning something new, or building something from scratch. 
+  Whether it's a project, a job opportunity, or you just 
+  want to say hello, I'd be happy to hear from you.`,
   email: "delrosariojulio@outlook.com",
   socials: [
     {

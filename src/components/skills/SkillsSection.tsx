@@ -53,7 +53,7 @@ export function SkillsSection() {
               variants={fadeUp}
               custom={STAGGER_MS}
             >
-              Tools I use to build things.
+              What I work with.
             </motion.p>
             
             <motion.div 

@@ -277,7 +277,7 @@ export function ProjectsSection() {
                   custom={STAGGER_MS}
                   className="projects__intro-block"
                 >
-                  <p className="projects__statement">Things I&apos;ve built.</p>
+                  <p className="projects__statement">What I&apos;ve built.</p>
                 </motion.div>
 
                 

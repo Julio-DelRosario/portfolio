@@ -13,7 +13,7 @@ export function SiteFooter() {
         <div className="footer__top">
           <div className="footer__brand">
             <span className="footer__logo">Julio&apos;s</span>
-            <p className="footer__tagline">Built with intention.</p>
+            <p className="footer__tagline">Built by Julio</p>
           </div>
 
           <nav className="footer__nav" aria-label="Footer navigation">

@@ -413,7 +413,7 @@ a {
 
 .hero__copy {
   position: relative;
-  max-width: 40rem;
+  max-width: 48rem;
 }
 
 /* ---- 1. Name — dominant personal identity ---- */
@@ -421,19 +421,19 @@ a {
 .hero__name {
   margin: 0;
   color: var(--color-text-primary);
-  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
   font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1;
-  text-wrap: balance;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
 /* ---- 2. Role — profession label ---- */
 
 .hero__role {
-  margin: var(--space-5) 0 0;
+  margin: var(--space-2) 0 0;
   color: var(--color-accent);
-  font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
+  font-size: clamp(0.75rem, 1vw, 0.875rem);
   font-weight: 600;
   letter-spacing: 0.1em;
   line-height: 1.2;
@@ -451,25 +451,27 @@ a {
   opacity: 0.6;
 }
 
-/* ---- 3. Tagline — value proposition ---- */
+/* ---- 3. Headline — personal statement ---- */
 
-.hero__tagline {
-  margin: 0;
-  color: var(--color-text-secondary);
-  font-size: clamp(1.375rem, 2.8vw, 2rem);
-  font-weight: 500;
+.hero__headline {
+  margin: var(--space-8) 0 var(--space-6) 0;
+  color: var(--color-text-primary);
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+  font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.25;
+  line-height: 1.15;
+  max-width: 28ch;
+  text-wrap: balance;
 }
 
 /* ---- 4. Description ---- */
 
 .hero__description {
-  max-width: 32rem;
-  margin: var(--space-6) 0 0;
-  color: var(--color-text-tertiary);
-  font-size: clamp(0.9375rem, 1.2vw, 1.0625rem);
-  line-height: 1.7;
+  max-width: 55ch;
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  line-height: 1.6;
 }
 
 /* ---- 5. Actions ---- */
@@ -478,7 +480,7 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-4);
-  margin-top: var(--space-10);
+  margin-top: var(--space-8);
 }
 
 /* ---- Small mobile: stack actions ---- */
@@ -614,20 +616,21 @@ a {
 }
 
 .about__statement {
-  font-size: clamp(1.75rem, 4vw, 3rem);
-  font-weight: 600;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 700;
   color: var(--color-text-primary);
-  line-height: 1.15;
+  line-height: 1.1;
   letter-spacing: -0.03em;
   text-wrap: balance;
-  margin: 0 0 var(--space-6);
+  max-width: 20ch;
+  margin: 0 0 var(--space-8);
 }
 
 .about__description {
-  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
   color: var(--color-text-secondary);
-  line-height: 1.7;
-  max-width: 38rem;
+  line-height: 1.6;
+  max-width: 60ch;
   margin: 0 0 var(--space-12);
 }
 
@@ -1400,31 +1403,33 @@ a {
 }
 
 .contact__intro-block {
-  margin-bottom: var(--space-10);
-  max-width: 35ch;
+  margin-bottom: var(--space-12);
 }
 
 .contact__statement {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: -0.02em;
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
   color: var(--color-text-primary);
   line-height: 1.1;
-  margin: 0 0 var(--space-6) 0;
+  margin: 0 0 var(--space-8) 0;
+  max-width: 15ch;
+  text-wrap: balance;
 }
 
 .contact__description {
-  font-size: var(--font-size-lg);
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
   color: var(--color-text-secondary);
-  line-height: var(--line-height-relaxed);
+  line-height: 1.6;
   margin: 0;
+  max-width: 60ch;
+  white-space: pre-line;
 }
 
 .contact__actions {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  margin-top: var(--space-12);
 }
 
 @media (min-width: 48rem) {
