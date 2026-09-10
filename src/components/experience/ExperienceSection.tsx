@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import type { Variants } from "framer-motion";
 import { PageContainer } from "@/components/layout/page-container";
-import { EXPERIENCES } from "@/data/experience";
+import { PROFESSIONAL_EXPERIENCE, LEADERSHIP_EXPERIENCE, Experience } from "@/data/experience";
 
 const STAGGER_MS = 150;
 const DURATION_S = 0.5;
@@ -33,6 +34,54 @@ function HexagonMarker() {
   );
 }
 
+const ExperienceItem = ({ exp, index, offsetDelay = 0 }: { exp: Experience; index: number; offsetDelay?: number }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  // -40% top and -45% bottom creates a strict 15% window exactly in the middle of the screen
+  const isInView = useInView(ref, { margin: "-40% 0px -45% 0px" });
+
+  return (
+  <motion.div
+    ref={ref}
+    className={`experience__item ${isInView ? "experience__item--active" : ""}`}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-10%" }}
+    variants={fadeUp}
+    custom={offsetDelay + index * STAGGER_MS}
+  >
+    <HexagonMarker />
+    
+    <div className="experience__item-content">
+      <div className="experience__item-header">
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="experience__item-period">{exp.period}</span>
+        </div>
+        <h3 className="experience__item-role">{exp.role}</h3>
+        <p className="experience__item-org">{exp.organization}</p>
+      </div>
+      
+      <div className="experience__item-body">
+        {exp.description && <p className="experience__item-desc">{exp.description}</p>}
+        
+        <ul className="experience__item-contributions">
+          {exp.contributions.map((contribution, i) => (
+            <li key={i}>{contribution}</li>
+          ))}
+        </ul>
+        
+        {exp.technologies && exp.technologies.length > 0 && (
+          <ul className="experience__item-tech">
+            {exp.technologies.map((tech) => (
+              <li key={tech}>{tech}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  </motion.div>
+  );
+};
+
 export function ExperienceSection() {
   return (
     <section id="experience" className="experience site-section" aria-labelledby="experience-heading">
@@ -52,6 +101,7 @@ export function ExperienceSection() {
           </motion.div>
 
           <div className="experience__content-area">
+            {/* Professional Experience Section */}
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -60,50 +110,35 @@ export function ExperienceSection() {
               custom={STAGGER_MS}
               className="experience__intro-block"
             >
-              <p className="experience__statement">My professional path.</p>
+              <h3 className="text-2xl font-bold text-(--color-text-primary) mb-2">Professional Experience</h3>
+            </motion.div>
+
+            <div className="experience__timeline mb-16">
+              <div className="experience__timeline-track" />
+              {PROFESSIONAL_EXPERIENCE.map((exp, index) => (
+                <ExperienceItem key={exp.id} exp={exp} index={index} offsetDelay={STAGGER_MS * 2} />
+              ))}
+            </div>
+
+            {/* Leadership Section */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-10%" }}
+              variants={fadeUp}
+              custom={STAGGER_MS}
+              className="experience__intro-block"
+            >
+              <h3 className="text-2xl font-bold text-(--color-text-primary) mb-2">Leadership & Organizations</h3>
             </motion.div>
 
             <div className="experience__timeline">
               <div className="experience__timeline-track" />
-              
-              {EXPERIENCES.map((exp, index) => (
-                <motion.div
-                  key={exp.id}
-                  className="experience__item"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-10%" }}
-                  variants={fadeUp}
-                  custom={STAGGER_MS * 2 + index * STAGGER_MS}
-                >
-                  <HexagonMarker />
-                  
-                  <div className="experience__item-content">
-                    <div className="experience__item-header">
-                      <span className="experience__item-period">{exp.period}</span>
-                      <h3 className="experience__item-role">{exp.role}</h3>
-                      <p className="experience__item-org">{exp.organization}</p>
-                    </div>
-                    
-                    <div className="experience__item-body">
-                      <p className="experience__item-desc">{exp.description}</p>
-                      
-                      <ul className="experience__item-contributions">
-                        {exp.contributions.map((contribution, i) => (
-                          <li key={i}>{contribution}</li>
-                        ))}
-                      </ul>
-                      
-                      <ul className="experience__item-tech">
-                        {exp.technologies.map((tech) => (
-                          <li key={tech}>{tech}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </motion.div>
+              {LEADERSHIP_EXPERIENCE.map((exp, index) => (
+                <ExperienceItem key={exp.id} exp={exp} index={index} offsetDelay={STAGGER_MS * 2} />
               ))}
             </div>
+            
           </div>
         </div>
       </PageContainer>

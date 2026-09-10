@@ -1221,7 +1221,8 @@ a {
   transition: transform 0.3s ease, stroke 0.3s ease, fill 0.3s ease;
 }
 
-.experience__item:hover .experience__marker-svg {
+.experience__item:hover .experience__marker-svg,
+.experience__item--active .experience__marker-svg {
   stroke: var(--color-accent);
   fill: var(--color-accent);
   transform: scale(1.2);
@@ -1255,7 +1256,8 @@ a {
   transition: color 0.3s ease;
 }
 
-.experience__item:hover .experience__item-role {
+.experience__item:hover .experience__item-role,
+.experience__item--active .experience__item-role {
   color: var(--color-accent);
 }
 
@@ -1332,7 +1334,8 @@ a {
   margin-left: var(--space-3);
 }
 
-.experience__item:hover .experience__item-tech li {
+.experience__item:hover .experience__item-tech li,
+.experience__item--active .experience__item-tech li {
   color: var(--color-text-secondary);
 }
 

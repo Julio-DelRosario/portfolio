@@ -1,16 +1,16 @@
 export const CONTACT_DATA = {
   heading: "Let's build something worth building.",
   description: "Whether it's a new product, a technical challenge, or an interesting idea, I'd like to hear about it.",
-  email: "hello@example.com", // PLACEHOLDER
+  email: "delrosariojulio@outlook.com",
   socials: [
     {
       platform: "GitHub",
-      url: "https://github.com/placeholder", // PLACEHOLDER
+      url: "https://github.com/Julio-DelRosario", // PLACEHOLDER
       icon: "github"
     },
     {
       platform: "LinkedIn",
-      url: "https://linkedin.com/in/placeholder", // PLACEHOLDER
+      url: "https://www.linkedin.com/in/juliodelrosario/", // PLACEHOLDER
       icon: "linkedin"
     }
   ]

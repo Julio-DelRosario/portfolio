@@ -6,7 +6,8 @@ import { motion, AnimatePresence, useReducedMotion, useScroll, useMotionValueEve
 import type { Variants } from "framer-motion";
 import { PageContainer } from "@/components/layout/page-container";
 import { PROJECTS } from "@/data/projects";
-import { ExternalLink, GitBranch } from "lucide-react";
+import { ExternalLink } from "lucide-react";
+import { GithubIcon } from "../icons/CustomIcons";
 
 const STAGGER_MS = 100;
 const DURATION_S = 0.6;
@@ -26,7 +27,7 @@ const fadeUp: Variants = {
 };
 
 function ProjectLinkIcon({ type }: { type: string }) {
-  if (type === "github") return <GitBranch className="w-4 h-4" />;
+  if (type === "github") return <GithubIcon className="w-4 h-4" />;
   return <ExternalLink className="w-4 h-4" />;
 }
 

@@ -3,49 +3,59 @@ export type Experience = {
   period: string;
   role: string;
   organization: string;
-  description: string;
+  description?: string;
   contributions: string[];
-  technologies: string[];
+  technologies?: string[];
 };
 
-export const EXPERIENCES: Experience[] = [
+export const PROFESSIONAL_EXPERIENCE: Experience[] = [
   {
     id: "exp-1",
-    period: "2024 - Present",
-    role: "Senior Software Engineer",
-    organization: "Tech Company Placeholder",
-    description: "Led the development of a high-performance web application, focusing on architectural scalability and user experience.",
+    period: "Mar 2026 - June 2026",
+    role: "IT Intern / On-the-Job Trainee",
+    organization: "Parañaque City Government - IT Development Department",
     contributions: [
-      "Architected the migration from legacy systems to a modern Next.js stack, reducing load times by 40%.",
-      "Mentored a team of 4 junior developers and established code review best practices.",
-      "Implemented a comprehensive CI/CD pipeline using GitHub Actions."
+      "Managed appointments and encoded data within the LGU administrative portal.",
+      "Performed data QA by cross-referencing physical IDs against encoded system records to ensure high data integrity.",
+      "Provided technical troubleshooting and onboarding support for non-technical users."
     ],
-    technologies: ["React", "Next.js", "TypeScript", "Node.js"]
+    technologies: []
+  }
+];
+
+export const LEADERSHIP_EXPERIENCE: Experience[] = [
+  {
+    id: "lead-1",
+    period: "Nov 2025 - Present",
+    role: "Treasurer",
+    organization: "AWS Cloud Club - Celestia",
+    contributions: [
+      "Managed budgeting and documentation for technical workshops.",
+      "Assisted in organizing and supporting AWS-focused technical events and activities for student members."
+    ],
+    technologies: []
   },
   {
-    id: "exp-2",
-    period: "2021 - 2024",
-    role: "Full-Stack Developer",
-    organization: "Agency Placeholder",
-    description: "Developed and maintained multiple client-facing applications across various industries.",
+    id: "lead-2",
+    period: "Oct 2025 - July 2026",
+    role: "Auditor",
+    organization: "Building Bytes Guild (Game Development Club)",
     contributions: [
-      "Built resilient REST APIs serving over 50,000 requests per minute.",
-      "Integrated third-party payment gateways and authentication providers.",
-      "Collaborated closely with designers to ensure pixel-perfect implementations."
+      "Reviewed financial records and helped monitor organizational expenses.",
+      "Supported planning and coordination of game development activities.",
+      "Helped maintain accurate documentation for organizational transactions and activities."
     ],
-    technologies: ["React", "Express", "MongoDB", "Tailwind CSS"]
+    technologies: []
   },
   {
-    id: "exp-3",
-    period: "2019 - 2021",
-    role: "Front-End Developer",
-    organization: "Startup Placeholder",
-    description: "Founding engineering team member responsible for the initial product launch.",
+    id: "lead-3",
+    period: "Oct 2024 - July 2025",
+    role: "Vice President",
+    organization: "Association of Information and Communications Technology Students",
     contributions: [
-      "Developed the initial MVP responsive web application.",
-      "Established the core design system and component library.",
-      "Optimized application state management."
+      "Co-led the executive board in planning and coordinating IT-related student events.",
+      "Delegated tasks across the organization to support effective event execution and student participation."
     ],
-    technologies: ["JavaScript", "React", "CSS", "Firebase"]
+    technologies: []
   }
 ];
