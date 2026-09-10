@@ -217,12 +217,16 @@ export function HoneycombCanvas() {
 
     frameRef.current = requestAnimationFrame(loop);
 
-    // -- Resize --
+    // -- Resize (use ResizeObserver to catch layout/CSS changes) --
     const handleResize = () => {
       if (resizeTimerRef.current) clearTimeout(resizeTimerRef.current);
       resizeTimerRef.current = setTimeout(buildGrid, RESIZE_DEBOUNCE_MS);
     };
-    window.addEventListener("resize", handleResize);
+    const resizeObserver = new ResizeObserver(() => handleResize());
+    if (canvasRef.current) {
+      resizeObserver.observe(canvasRef.current);
+    }
+    window.addEventListener("resize", handleResize); // fallback
 
     // -- Cleanup --
     return () => {
@@ -231,6 +235,7 @@ export function HoneycombCanvas() {
       if (resizeTimerRef.current) clearTimeout(resizeTimerRef.current);
       if (pulseTimerRef.current) clearTimeout(pulseTimerRef.current);
       if (twinkleTimerRef.current) clearTimeout(twinkleTimerRef.current);
+      resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointermove", handlePointerMove);
       document.removeEventListener("pointerleave", handlePointerLeave);

@@ -16,8 +16,6 @@ export default function Home() {
         <PageContainer className="hero__container">
           <HeroContent />
         </PageContainer>
-
-        <div className="hero__bottom-fade" aria-hidden="true" />
       </section>
 
       <AboutSection />
