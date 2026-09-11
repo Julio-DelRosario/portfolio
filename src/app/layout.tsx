@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { Analytics } from "@vercel/analytics/react";
 
 import "./globals.css";
 
@@ -26,6 +27,7 @@ export default function RootLayout({
           {children}
           <SiteFooter />
         </div>
+        <Analytics />
       </body>
     </html>
   );
