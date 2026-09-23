@@ -59,7 +59,6 @@ const ACTIVE_NODES: HexNode[] = [
   { id: 'Laravel', label: 'Laravel', type: 'skill', category: 'Backend', col: -1, row: 2, icon: LaravelIcon },
   { id: 'PostgreSQL', label: 'PostgreSQL', type: 'skill', category: 'Backend', col: -2, row: 2, icon: Server },
   { id: 'MySQL', label: 'MySQL', type: 'skill', category: 'Backend', col: -2.5, row: 1, icon: MysqlIcon },
-  { id: 'Node.js', label: 'Node.js', type: 'skill', category: 'Backend', col: -3, row: 2, icon: NodejsIcon },
   { id: 'REST API', label: 'REST API', type: 'skill', category: 'Backend', col: -3.5, row: 1, icon: Network },
 
   // TOOLS BRANCH
